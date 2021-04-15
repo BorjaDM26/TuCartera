@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31129.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TuCartera", "TuCartera\TuCartera.csproj", "{623242A2-5F1C-46D7-812E-E88B78E4D9D3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{22F92B05-1B35-4186-A40E-34BC4853845F} = {22F92B05-1B35-4186-A40E-34BC4853845F}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TuCartera.DBModel", "TuCartera.DBModel\TuCartera.DBModel.csproj", "{22F92B05-1B35-4186-A40E-34BC4853845F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{623242A2-5F1C-46D7-812E-E88B78E4D9D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{623242A2-5F1C-46D7-812E-E88B78E4D9D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{623242A2-5F1C-46D7-812E-E88B78E4D9D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{623242A2-5F1C-46D7-812E-E88B78E4D9D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22F92B05-1B35-4186-A40E-34BC4853845F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22F92B05-1B35-4186-A40E-34BC4853845F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22F92B05-1B35-4186-A40E-34BC4853845F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22F92B05-1B35-4186-A40E-34BC4853845F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0374E452-0A92-4C29-8D29-CC87FF5B9682}
+	EndGlobalSection
+EndGlobal
