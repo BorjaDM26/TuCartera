@@ -13,4 +13,8 @@
     <Folder Include="ClientApp\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TuCartera.DBModel\TuCartera.DBModel.csproj" />
+  </ItemGroup>
+
 </Project>

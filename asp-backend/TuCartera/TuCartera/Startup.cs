@@ -19,6 +19,10 @@ namespace TuCartera
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Register SQL database configuration context as services
+            string contextString = Configuration.GetConnectionString("TuCarteraContext");
+            services.AddScoped<IAdapter>(_ => new Adapter(contextString));
+
             // Use Cross Origin Resource Sharing
             services.AddCors();
 
@@ -28,7 +32,6 @@ namespace TuCartera
             {
                 configuration.RootPath = "ClientApp";
             });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
