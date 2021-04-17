@@ -1,12 +1,28 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <app-header />
+    <div class="app-content">
+      <router-view />
     </div>
-    <router-view />
+    <app-footer />
   </div>
 </template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+
+import AppHeader from '@/components/Layout/AppHeader.vue';
+import AppFooter from '@/components/Layout/AppFooter.vue';
+
+@Component({
+  name: 'App',
+  components: {
+    AppHeader,
+    AppFooter,
+  },
+})
+export default class App extends Vue {}
+</script>
 
 <style lang="scss">
 #app {
@@ -15,18 +31,14 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.app-content {
+  flex-grow: 1;
+  padding: 1.5rem 3.5rem;
 }
 </style>
