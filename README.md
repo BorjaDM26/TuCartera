@@ -37,3 +37,8 @@ npm run lint
 ## API (.NET Core)
 
 This block includes two modules: main module, where EPs are defined, and DBModel, which includes an adapter to use database.
+
+To make it work, you have to set the following values in `appsettings.json`:
+
+-   `TuCarteraContext`: connection string to your database.
+-   `FmpApiKey`: the api key to use Financial Modeling Prep API.
