@@ -3,6 +3,7 @@
     <app-header />
     <div class="app-content">
       <router-view />
+      <custom-loading :isLoading="isLoading" />
     </div>
     <app-footer />
   </div>
@@ -11,17 +12,31 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import AppHeader from '@/components/Layout/AppHeader.vue';
-import AppFooter from '@/components/Layout/AppFooter.vue';
+import AppHeader from '@/components/layout/AppHeader.vue';
+import AppFooter from '@/components/layout/AppFooter.vue';
+import CustomLoading from '@/components/common/CustomLoading.vue';
+
+import { userStore } from './store/user/userStore';
 
 @Component({
   name: 'App',
   components: {
     AppHeader,
     AppFooter,
+    CustomLoading,
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  private userCtx = userStore.context(this.$store);
+
+  created(): void {
+    this.userCtx.actions.initialise();
+  }
+
+  private get isLoading(): boolean {
+    return this.userCtx.getters.isLoading;
+  }
+}
 </script>
 
 <style lang="scss">
