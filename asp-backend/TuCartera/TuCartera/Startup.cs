@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Text.Json;
 using TuCartera.DBModel;
 
 namespace TuCartera
@@ -26,12 +28,25 @@ namespace TuCartera
             // Use Cross Origin Resource Sharing
             services.AddCors();
 
-            services.AddControllers();
+            // Register Automapper
+            services.AddAutoMapper(typeof(Startup));
 
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp";
-            });
+            // Register custom services
+            services.AddHttpContextAccessor();
+            services.AddScoped<Services.IUsersService, Services.UsersService>();
+
+            services.AddControllers()
+                    .AddJsonOptions(options => {
+                        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                    });
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie();
+
+            //services.AddSpaStaticFiles(configuration =>
+            //{
+            //    configuration.RootPath = "ClientApp";
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,8 +60,10 @@ namespace TuCartera
             //app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseSpaStaticFiles();
+            //app.UseSpaStaticFiles();
             app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCookiePolicy();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -54,12 +71,12 @@ namespace TuCartera
                 endpoints.MapControllers();
             });
 
-            app.UseSpa(spa =>
-            {
-                if (!env.IsDevelopment()) { 
-                    spa.Options.SourcePath = "ClientApp";
-                }
-            });
+            //app.UseSpa(spa =>
+            //{
+            //    if (!env.IsDevelopment()) { 
+            //        spa.Options.SourcePath = "ClientApp";
+            //    }
+            //});
         }
     }
 }
