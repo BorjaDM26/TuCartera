@@ -107,64 +107,63 @@ USE [tu_cartera_bd]
 GO
 
 /*-- Users --*/
+-- Description: Get user info
+CREATE OR ALTER PROCEDURE [spUserGetLogin]
+    @user_id INTEGER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT U.[id] as 'user_id', U.[name] as 'user_name', U.[email] as 'user_email'
+    FROM [tu_cartera_bd].[dbo].[user] as U
+    WHERE U.[id] = @user_id
+END
+GO
+
+-- Description: Check user credentials
+CREATE OR ALTER PROCEDURE [spUserPostLogin]
+    @user_email NVARCHAR(200), 
+    @user_pass NVARCHAR(200)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @user_id INTEGER;
+    DECLARE @passHash BINARY(32);
+    SELECT @passHash = HASHBYTES('SHA2_256', @user_pass);
+    
+    SELECT @user_id = U.[id]
+        FROM [dbo].[user] as U 
+        WHERE U.[email] = @user_email AND U.[pass] = @passHash;
+
+    IF(@user_id is null)
+        SET @user_id = -1
+
+    SELECT @user_id as [user_id]
+END
+GO
+
 -- Description: Add a new user in the system
 CREATE OR ALTER PROCEDURE [spUserRegister]
-    @pName NVARCHAR(50), 
-    @pEmail NVARCHAR(200), 
-    @pPass NVARCHAR(200),
-    @responseMessage NVARCHAR(250) OUTPUT
+    @user_name NVARCHAR(50), 
+    @user_email NVARCHAR(200), 
+    @user_pass NVARCHAR(200)
 AS
 BEGIN
     SET NOCOUNT ON
 
     BEGIN TRY
         DECLARE @passHash BINARY(32);
-        SELECT @passHash = HASHBYTES('SHA2_256', @pPass);
+        SELECT @passHash = HASHBYTES('SHA2_256', @user_pass);
 
         INSERT INTO [dbo].[user] (name, email, pass)
-          VALUES(@pName, @pEmail, @passHash)
+          VALUES(@user_name, @user_email, @passHash)
 
-        SET @responseMessage='Success'
-
+        SELECT U.[id] as 'user_id', U.[name] as 'user_name', U.[email] as 'user_email'
+            FROM [dbo].[user] as U 
+            WHERE U.[email] = @user_email AND U.[pass] = @passHash;
     END TRY
     BEGIN CATCH
-        SET @responseMessage=ERROR_MESSAGE() 
     END CATCH
 END
 GO
-
--- Description: Identify user to the system
-CREATE OR ALTER PROCEDURE [spUserLogin]
-    @pEmail NVARCHAR(200), 
-    @pPass NVARCHAR(200)
-AS
-BEGIN
-    SET NOCOUNT ON
-
-    BEGIN TRY
-        DECLARE @passHash BINARY(32);
-        SELECT @passHash = HASHBYTES('SHA2_256', @pPass);
-
-        RETURN (SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
-          FROM [dbo].[user] 
-          WHERE [email] = @pEmail AND [pass] = @passHash);
-			
-    END TRY
-    BEGIN CATCH
-        RETURN -1 ;
-    END CATCH
-END
-GO
-
-
-/*-- Portfolios --*/
--- Description: Get portfolios list
-CREATE OR ALTER PROCEDURE [spGetPortfolios]
-    @userId INTEGER
-AS
-    SELECT P.id as 'pId', P.name as 'pName', P.description as 'pDesc', 
-           T.id as 'tId', T.name as 'tName', T.code as 'tCode'
-    FROM [tu_cartera_bd].[dbo].[portfolio] as P, [tu_cartera_bd].[dbo].[ticker] as T, [tu_cartera_bd].[dbo].[portfolio_tickers] as PT
-    WHERE P.user_id = @userId AND PT.portfolio_id = P.id AND PT.ticker_id = T.id
-GO
-

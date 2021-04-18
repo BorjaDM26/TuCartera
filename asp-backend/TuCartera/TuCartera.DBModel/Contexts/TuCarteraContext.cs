@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using TuCartera.DBModel.Contexts.Entities;
-using TuCartera.DBModel.Contexts.StoreProcedures;
 
 namespace TuCartera.DBModel.Contexts
 {
@@ -35,7 +34,9 @@ namespace TuCartera.DBModel.Contexts
 
         #region Stored procedures
 
-
+        public DbSet<SpUserGetLoginResult> SpUserGetLogin { get; set; }
+        public DbSet<SpUserPostLoginResult> SpUserPostLogin { get; set; }
+        public DbSet<SpUserRegisterResult> SpUserRegister { get; set; }
 
         #endregion
 
@@ -57,7 +58,9 @@ namespace TuCartera.DBModel.Contexts
 
             #region Stored procedures
 
-
+            modelBuilder.Entity<SpUserGetLoginResult>().HasNoKey();
+            modelBuilder.Entity<SpUserPostLoginResult>().HasNoKey();
+            modelBuilder.Entity<SpUserRegisterResult>().HasNoKey();
 
             #endregion
 
