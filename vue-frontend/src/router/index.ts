@@ -6,6 +6,7 @@ import Login from '@/views/Login.vue';
 import Register from '@/views/Register.vue';
 
 import { HomeRouteName, LoginRouteName, RegisterRouteName } from './routeNames';
+import { authGuard } from './guards';
 
 Vue.use(VueRouter);
 
@@ -14,6 +15,7 @@ const routes: Array<RouteConfig> = [
     path: '/',
     name: HomeRouteName,
     component: Home,
+    meta: { requiresAuth: true },
   },
   {
     path: '/login',
@@ -41,5 +43,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+
+authGuard(router, LoginRouteName, HomeRouteName);
 
 export default router;

@@ -29,10 +29,6 @@ import { userStore } from './store/user/userStore';
 export default class App extends Vue {
   private userCtx = userStore.context(this.$store);
 
-  created(): void {
-    this.userCtx.actions.initialise();
-  }
-
   private get isLoading(): boolean {
     return this.userCtx.getters.isLoading;
   }
