@@ -3,8 +3,9 @@ import VueRouter, { RouteConfig } from 'vue-router';
 
 import Home from '../views/Home.vue';
 import Login from '@/views/Login.vue';
+import Register from '@/views/Register.vue';
 
-import { HomeRouteName, LoginRouteName } from './routeNames';
+import { HomeRouteName, LoginRouteName, RegisterRouteName } from './routeNames';
 
 Vue.use(VueRouter);
 
@@ -18,6 +19,11 @@ const routes: Array<RouteConfig> = [
     path: '/login',
     name: LoginRouteName,
     component: Login,
+  },
+  {
+    path: '/register',
+    name: RegisterRouteName,
+    component: Register,
   },
   {
     path: '/about',
