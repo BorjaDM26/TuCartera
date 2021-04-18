@@ -6,7 +6,12 @@ import { store } from './store';
 import Buefy from 'buefy';
 import 'buefy/dist/buefy.css';
 
+import '@/validation/formValidation';
+import { ValidationProvider } from 'vee-validate';
+
 Vue.use(Buefy);
+
+Vue.component('ValidationProvider', ValidationProvider);
 
 Vue.config.productionTip = false;
 
