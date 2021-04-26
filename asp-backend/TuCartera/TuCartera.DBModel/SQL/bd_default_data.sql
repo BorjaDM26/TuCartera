@@ -9,19 +9,17 @@
 /*------------------------------------------------------
 --  INSERT INITIAL VALUES
 ------------------------------------------------------*/
--- USE [tu_cartera_bd]
--- GO
+USE [tu_cartera_bd]
+GO
 
 /*-- User --*/
 -- Register users
-DECLARE	@return_value int, @responseMessage nvarchar(250)
-EXEC	@return_value = [dbo].[spUserRegister]
- 		@pName = N'Admin', @pEmail = N'admin@mail.com', @pPass = N'12345678', @responseMessage = @responseMessage OUTPUT
+EXEC	[dbo].[spUserRegister]
+ 			@user_name = N'Admin', @user_email = N'admin@mail.com', @user_pass = N'12345678'
 GO
 
-DECLARE	@return_value int, @responseMessage nvarchar(250)
-EXEC	@return_value = [dbo].[spUserRegister]
- 		@pName = N'Usuario 1', @pEmail = N'user1@mail.com', @pPass = N'12345678', @responseMessage = @responseMessage OUTPUT
+EXEC	[dbo].[spUserRegister]
+ 			@user_name = N'Usuario 1', @user_email = N'user1@mail.com', @user_pass = N'12345678'
 GO
 
 
@@ -31,10 +29,8 @@ INSERT INTO [dbo].[currency] (name, code) VALUES ('Euro', 'EUR');
 
 
 /*-- Portfolio --*/
-INSERT INTO [dbo].[portfolio] (name, description, user_id) VALUES ('Global', 'Datos acumulados de todas las transacciones', '1');
-INSERT INTO [dbo].[portfolio] (name, description, user_id) VALUES ('Global', 'Datos acumulados de todas las transacciones', '2');
-INSERT INTO [dbo].[portfolio] (name, description, user_id) VALUES ('Tecnológicas', 'Empresas tecnológicas', '1');
-INSERT INTO [dbo].[portfolio] (name, description, user_id) VALUES ('Turísticas', 'Empresas turísticas', '1');
+INSERT INTO [dbo].[portfolio] (name, is_global, description, user_id) VALUES ('Tecnológicas', 0, 'Empresas tecnológicas', '1');
+INSERT INTO [dbo].[portfolio] (name, is_global, description, user_id) VALUES ('Turísticas', 0, 'Empresas turísticas', '1');
 
 
 /*-- Ticker --*/
@@ -45,14 +41,6 @@ INSERT INTO [dbo].[ticker] (code, name) VALUES ('MSFT', 'Microsoft Corp');
 
 
 /*-- Portfolio tickers --*/
-INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) VALUES ('1', '1');
-INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) VALUES ('1', '2');
-INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) VALUES ('1', '3');
-INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) VALUES ('1', '4');
-INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) VALUES ('2', '1');
-INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) VALUES ('2', '2');
-INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) VALUES ('2', '3');
-INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) VALUES ('2', '4');
 INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) VALUES ('3', '1');
 INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) VALUES ('3', '2');
 INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) VALUES ('4', '3');
