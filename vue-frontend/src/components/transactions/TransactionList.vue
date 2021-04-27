@@ -143,9 +143,7 @@ export default class TransactionList extends Vue {
   private get transactions(): Transaction[] {
     const { transactions } = this.transactionCtx.state;
     if (this.isLimited) {
-      return (
-        transactions.slice(0, this.limitedResults)
-      );
+      return transactions.slice(0, this.limitedResults);
     } else {
       return transactions;
     }
