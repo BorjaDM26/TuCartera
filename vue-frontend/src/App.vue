@@ -2,7 +2,7 @@
   <div id="app">
     <app-header />
     <div class="app-content">
-      <router-view />
+      <router-view class="router-view" />
       <custom-loading :isLoading="isLoading" />
     </div>
     <app-footer />
@@ -39,17 +39,22 @@ export default class App extends Vue {
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 .app-content {
+  display: flex;
+  justify-content: center;
   flex-grow: 1;
   padding: 1.5rem 3.5rem;
+
+  & .router-view {
+    display: flex;
+    align-items: flex-start;
+    max-width: 1300px;
+    width: 100%;
+  }
 }
 </style>
