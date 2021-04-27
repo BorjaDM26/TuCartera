@@ -38,6 +38,33 @@ namespace TuCartera.Automapper
                 .ForMember(dest => dest.TransactionTypeType, opt => opt.MapFrom(src => src.transaction_type_type));
 
             #endregion
+
+            #region Currencies
+
+            CreateMap<SpCurrencyItemResult, CurrencyDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.currency_id))
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.currency_code))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.currency_name));
+
+            #endregion
+
+            #region Tickers
+
+            CreateMap<SpTickerItemResult, TickerDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ticker_id))
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.ticker_code))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ticker_name));
+
+            #endregion
+
+            #region Transaction types
+
+            CreateMap<SpTransactionTypeItemResult, TransactionTypeDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.transaction_type_id))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.transaction_type_type))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.transaction_type_description));
+
+            #endregion
         }
     }
 }
