@@ -4,6 +4,7 @@ import { createStore, Module } from 'vuex-smart-module';
 
 import { userStore as user } from './user/userStore';
 import { transactionStore as transaction } from './transaction/transactionStore';
+import { selectorsStore as selectors } from './selectors/selectorsStore';
 
 Vue.use(Vuex);
 
@@ -11,6 +12,7 @@ const root = new Module({
   modules: {
     user,
     transaction,
+    selectors,
   },
 });
 
