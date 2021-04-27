@@ -36,20 +36,11 @@ namespace TuCartera.DBModel
 
         #endregion
 
-        #region Tickers
+        #region Selectors
 
-
-
-        #endregion
-
-        #region Currencies
-
-
-
-        #endregion
-
-        #region Transation types
-
+        List<SpCurrencyItemResult> CurrencyList();
+        List<SpTickerItemResult> TickerList();
+        List<SpTransactionTypeItemResult> TransactionTypeList();
 
 
         #endregion
@@ -231,21 +222,49 @@ namespace TuCartera.DBModel
 
         #endregion
 
-        #region Tickers
+        #region Selectors
 
+        public List<SpCurrencyItemResult> CurrencyList()
+        {
+            try
+            {
+                string sqlQuery = "EXECUTE [dbo].[spCurrencyList]";
+                var currencies = _context.SpCurrencyList.FromSqlRaw(sqlQuery).ToListAsync().GetAwaiter().GetResult();
+                return currencies;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
+        public List<SpTickerItemResult> TickerList()
+        {
+            try
+            {
+                string sqlQuery = "EXECUTE [dbo].[spTickerList]";
+                var tickers = _context.SpTickerList.FromSqlRaw(sqlQuery).ToListAsync().GetAwaiter().GetResult();
+                return tickers;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
-        #endregion
-
-        #region Currencies
-
-
-
-        #endregion
-
-        #region Transation types
-
-
+        public List<SpTransactionTypeItemResult> TransactionTypeList()
+        {
+            try
+            {
+                string sqlQuery = "EXECUTE [dbo].[spTransactionTypeList]";
+                var transactionTypes = _context.SpTransactionTypeList.FromSqlRaw(sqlQuery).ToListAsync().GetAwaiter().GetResult();
+                return transactionTypes;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         #endregion
     }
