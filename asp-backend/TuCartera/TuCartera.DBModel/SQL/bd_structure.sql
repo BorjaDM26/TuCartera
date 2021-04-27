@@ -303,3 +303,41 @@ BEGIN
 END
 GO
 
+
+/*-- Common selectors --*/
+-- Description: Get currency list
+CREATE OR ALTER PROCEDURE [spCurrencyList]
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT [id] as 'currency_id', [code] as 'currency_code', [name] as 'currency_name'
+    FROM [dbo].[currency]
+    ORDER BY [code] ASC
+END
+GO
+
+-- Description: Get ticker list
+CREATE OR ALTER PROCEDURE [spTickerList]
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT [id] as 'ticker_id', [code] as 'ticker_code', [name] as 'ticker_name'
+    FROM [dbo].[ticker]
+    ORDER BY [code] ASC
+END
+GO
+
+-- Description: Get transaction typr list
+CREATE OR ALTER PROCEDURE [spTransactionTypeList]
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT [id] as 'transaction_type_id', [type] as 'transaction_type_type', [description] as 'transaction_type_description'
+    FROM [dbo].[transaction_type]
+    ORDER BY [id] ASC
+END
+GO
+
