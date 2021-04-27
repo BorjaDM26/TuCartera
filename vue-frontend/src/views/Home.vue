@@ -1,19 +1,26 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    <transaction-list :is-limited="true" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import TransactionList from '@/components/transactions/TransactionList.vue';
+
+import { transactionStore } from '@/store/transaction/transactionStore';
 
 @Component({
-  name: 'Login',
+  name: 'Home',
   components: {
-    HelloWorld,
+    TransactionList,
   },
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  private transactionCtx = transactionStore.context(this.$store);
+
+  created(): void {
+    this.transactionCtx.actions.initialise();
+  }
+}
 </script>
