@@ -177,7 +177,7 @@ namespace TuCartera.DBModel
                 SqlParameter transactionTypeParam = new SqlParameter("@transaction_type_id", transactionTypeId);
                 SqlParameter currencyParam = new SqlParameter("@currency_id", currencyId);
                 SqlParameter tickerParam = new SqlParameter("@ticker_id", tickerId);
-                string sqlQuery = "EXECUTE [dbo].[spTransactionAdd] @shares,@price,@date,@comment,@user_id,@transaction_type_id,@ticker_id,@ticker_id";
+                string sqlQuery = "EXECUTE [dbo].[spTransactionAdd] @shares,@price,@date,@comment,@user_id,@transaction_type_id,@currency_id,@ticker_id";
                 var transactionId = _context.SpTransactionAdd.FromSqlRaw(sqlQuery, sharesParam, priceParam, dateParam, commentParam, userParam, transactionTypeParam, currencyParam, tickerParam)
                                      .ToListAsync().GetAwaiter().GetResult().FirstOrDefault().transaction_id;
                 return transactionId;
@@ -202,7 +202,7 @@ namespace TuCartera.DBModel
                 SqlParameter transactionTypeParam = new SqlParameter("@transaction_type_id", transactionTypeId);
                 SqlParameter currencyParam = new SqlParameter("@currency_id", currencyId);
                 SqlParameter tickerParam = new SqlParameter("@ticker_id", tickerId);
-                string sqlQuery = "EXECUTE [dbo].[spTransactionEdit] @transaction_id,@shares,@price,@date,@comment,@transaction_type_id,@ticker_id,@ticker_id";
+                string sqlQuery = "EXECUTE [dbo].[spTransactionEdit] @transaction_id,@shares,@price,@date,@comment,@transaction_type_id,@currency_id,@ticker_id";
                 var res = _context.SpTransactionEdit.FromSqlRaw(sqlQuery, transactionParam, sharesParam, priceParam, dateParam, commentParam, transactionTypeParam, currencyParam, tickerParam)
                                      .ToListAsync().GetAwaiter().GetResult().FirstOrDefault().transaction_id;
                 return res;
