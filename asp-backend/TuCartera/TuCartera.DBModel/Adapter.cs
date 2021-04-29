@@ -27,24 +27,20 @@ namespace TuCartera.DBModel
 
         #region Transactions
 
+        List<SpTransactionItemResult> TransactionList(int userId);
+        SpTransactionItemResult TransactionItem(int transactionId);
 
-
-        #endregion
-
-        #region Tickers
-
-
-
-        #endregion
-
-        #region Currencies
-
-
+        int TransactionAdd(int shares, float price, DateTime date, string comment, int userId, int transactionTypeId, int currencyId, int tickerId);
+        int TransactionEdit(int transactionId, int shares, float price, DateTime date, string comment, int transactionTypeId, int currencyId, int tickerId);
+        int TransactionDelete(int transactionId);
 
         #endregion
 
-        #region Transation types
+        #region Selectors
 
+        List<SpCurrencyItemResult> CurrencyList();
+        List<SpTickerItemResult> TickerList();
+        List<SpTransactionTypeItemResult> TransactionTypeList();
 
 
         #endregion
@@ -126,25 +122,149 @@ namespace TuCartera.DBModel
 
         #region Transactions
 
+        public List<SpTransactionItemResult> TransactionList(int userId)
+        {
+            try
+            {
+                SqlParameter userParam = new SqlParameter("@user_id", userId);
+                string sqlQuery = "EXECUTE [dbo].[spTransactionList] @user_id";
+                var transactions = _context.SpTransactionList.FromSqlRaw(sqlQuery, userParam)
+                                     .ToListAsync().GetAwaiter().GetResult();
+                return transactions;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
+        public SpTransactionItemResult TransactionItem(int transactionId)
+        {
+            try
+            {
+                SqlParameter transactionParam = new SqlParameter("@transaction_id", transactionId);
+                string sqlQuery = "EXECUTE [dbo].[spTransactionItem] @transaction_id";
+                var transaction = _context.SpTransactionItem.FromSqlRaw(sqlQuery, transactionParam)
+                                     .ToListAsync().GetAwaiter().GetResult().FirstOrDefault();
+                return transaction;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public int TransactionAdd(int shares, float price, DateTime date, string comment, int userId, int transactionTypeId, int currencyId, int tickerId)
+        {
+            try
+            {
+                SqlParameter sharesParam = new SqlParameter("@shares", shares);
+                SqlParameter priceParam = new SqlParameter("@price", price);
+                SqlParameter dateParam = new SqlParameter("@date", date);
+                SqlParameter commentParam = !string.IsNullOrEmpty(comment)
+                    ? new SqlParameter("@comment", comment)
+                    : new SqlParameter("@comment", DBNull.Value);
+                SqlParameter userParam = new SqlParameter("@user_id", userId);
+                SqlParameter transactionTypeParam = new SqlParameter("@transaction_type_id", transactionTypeId);
+                SqlParameter currencyParam = new SqlParameter("@currency_id", currencyId);
+                SqlParameter tickerParam = new SqlParameter("@ticker_id", tickerId);
+                string sqlQuery = "EXECUTE [dbo].[spTransactionAdd] @shares,@price,@date,@comment,@user_id,@transaction_type_id,@currency_id,@ticker_id";
+                var transactionId = _context.SpTransactionAdd.FromSqlRaw(sqlQuery, sharesParam, priceParam, dateParam, commentParam, userParam, transactionTypeParam, currencyParam, tickerParam)
+                                     .ToListAsync().GetAwaiter().GetResult().FirstOrDefault().transaction_id;
+                return transactionId;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        public int TransactionEdit(int transactionId, int shares, float price, DateTime date, string comment, int transactionTypeId, int currencyId, int tickerId)
+        {
+            try
+            {
+                SqlParameter transactionParam = new SqlParameter("@transaction_id", transactionId);
+                SqlParameter sharesParam = new SqlParameter("@shares", shares);
+                SqlParameter priceParam = new SqlParameter("@price", price);
+                SqlParameter dateParam = new SqlParameter("@date", date);
+                SqlParameter commentParam = !string.IsNullOrEmpty(comment)
+                    ? new SqlParameter("@comment", comment)
+                    : new SqlParameter("@comment", DBNull.Value);
+                SqlParameter transactionTypeParam = new SqlParameter("@transaction_type_id", transactionTypeId);
+                SqlParameter currencyParam = new SqlParameter("@currency_id", currencyId);
+                SqlParameter tickerParam = new SqlParameter("@ticker_id", tickerId);
+                string sqlQuery = "EXECUTE [dbo].[spTransactionEdit] @transaction_id,@shares,@price,@date,@comment,@transaction_type_id,@currency_id,@ticker_id";
+                var res = _context.SpTransactionEdit.FromSqlRaw(sqlQuery, transactionParam, sharesParam, priceParam, dateParam, commentParam, transactionTypeParam, currencyParam, tickerParam)
+                                     .ToListAsync().GetAwaiter().GetResult().FirstOrDefault().transaction_id;
+                return res;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        public int TransactionDelete(int transactionId)
+        {
+            try
+            {
+                SqlParameter transactionParam = new SqlParameter("@transaction_id", transactionId);
+                string sqlQuery = "EXECUTE [dbo].[spTransactionDelete] @transaction_id";
+                var res = _context.SpTransactionDelete.FromSqlRaw(sqlQuery, transactionParam)
+                                     .ToListAsync().GetAwaiter().GetResult().FirstOrDefault().transaction_id;
+                return res;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
 
         #endregion
 
-        #region Tickers
+        #region Selectors
 
+        public List<SpCurrencyItemResult> CurrencyList()
+        {
+            try
+            {
+                string sqlQuery = "EXECUTE [dbo].[spCurrencyList]";
+                var currencies = _context.SpCurrencyList.FromSqlRaw(sqlQuery).ToListAsync().GetAwaiter().GetResult();
+                return currencies;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
+        public List<SpTickerItemResult> TickerList()
+        {
+            try
+            {
+                string sqlQuery = "EXECUTE [dbo].[spTickerList]";
+                var tickers = _context.SpTickerList.FromSqlRaw(sqlQuery).ToListAsync().GetAwaiter().GetResult();
+                return tickers;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
-        #endregion
-
-        #region Currencies
-
-
-
-        #endregion
-
-        #region Transation types
-
-
+        public List<SpTransactionTypeItemResult> TransactionTypeList()
+        {
+            try
+            {
+                string sqlQuery = "EXECUTE [dbo].[spTransactionTypeList]";
+                var transactionTypes = _context.SpTransactionTypeList.FromSqlRaw(sqlQuery).ToListAsync().GetAwaiter().GetResult();
+                return transactionTypes;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         #endregion
     }

@@ -1,3 +1,10 @@
+export const HomeRouteName = 'HomeRoute';
+
+// Authentication
 export const LoginRouteName = 'LoginRoute';
 export const RegisterRouteName = 'RegisterRoute';
-export const HomeRouteName = 'HomeRoute';
+
+// Transaction
+export const TransactionListRouteName = 'TransactionListRoute';
+export const TransactionAddRouteName = 'TransactionAddRoute';
+export const TransactionEditRouteName = 'TransactionEditRoute';

@@ -37,6 +37,14 @@ namespace TuCartera.DBModel.Contexts
         public DbSet<SpUserGetLoginResult> SpUserGetLogin { get; set; }
         public DbSet<SpUserPostLoginResult> SpUserPostLogin { get; set; }
         public DbSet<SpUserRegisterResult> SpUserRegister { get; set; }
+        public DbSet<SpTransactionItemResult> SpTransactionList { get; set; }
+        public DbSet<SpTransactionItemResult> SpTransactionItem { get; set; }
+        public DbSet<SpTransactionAddResult> SpTransactionAdd { get; set; }
+        public DbSet<SpTransactionEditResult> SpTransactionEdit { get; set; }
+        public DbSet<SpTransactionDeleteResult> SpTransactionDelete { get; set; }
+        public DbSet<SpCurrencyItemResult> SpCurrencyList { get; set; }
+        public DbSet<SpTickerItemResult> SpTickerList { get; set; }
+        public DbSet<SpTransactionTypeItemResult> SpTransactionTypeList { get; set; }
 
         #endregion
 
@@ -61,6 +69,13 @@ namespace TuCartera.DBModel.Contexts
             modelBuilder.Entity<SpUserGetLoginResult>().HasNoKey();
             modelBuilder.Entity<SpUserPostLoginResult>().HasNoKey();
             modelBuilder.Entity<SpUserRegisterResult>().HasNoKey();
+            modelBuilder.Entity<SpTransactionItemResult>().HasNoKey();
+            modelBuilder.Entity<SpTransactionAddResult>().HasNoKey();
+            modelBuilder.Entity<SpTransactionEditResult>().HasNoKey();
+            modelBuilder.Entity<SpTransactionDeleteResult>().HasNoKey();
+            modelBuilder.Entity<SpCurrencyItemResult>().HasNoKey();
+            modelBuilder.Entity<SpTickerItemResult>().HasNoKey();
+            modelBuilder.Entity<SpTransactionTypeItemResult>().HasNoKey();
 
             #endregion
 

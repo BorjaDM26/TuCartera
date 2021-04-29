@@ -1,0 +1,28 @@
+@import '../variables/colors';
+
+table {
+  & .table-header {
+    background-color: $light-black;
+    text-transform: uppercase;
+
+    & .th-wrap {
+      justify-content: center;
+    }
+
+    & span {
+      color: white;
+    }
+  }
+}
+
+.b-table th {
+  &.is-current-sort,
+  &.is-sortable:hover {
+    background-color: $light-black !important;
+    opacity: 0.65 !important;
+  }
+
+  & .th-wrap .control {
+    width: 100%;
+  }
+}

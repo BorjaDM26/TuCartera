@@ -1,11 +1,21 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 
-import Home from '../views/Home.vue';
+import Home from '@/views/Home.vue';
 import Login from '@/views/Login.vue';
 import Register from '@/views/Register.vue';
+import Transaction from '@/views/Transaction.vue';
+import TransactionList from '@/components//transactions/TransactionList.vue';
+import TransactionEdit from '@/views/TransactionEdit.vue';
 
-import { HomeRouteName, LoginRouteName, RegisterRouteName } from './routeNames';
+import {
+  HomeRouteName,
+  LoginRouteName,
+  RegisterRouteName,
+  TransactionListRouteName,
+  TransactionAddRouteName,
+  TransactionEditRouteName,
+} from './routeNames';
 import { authGuard } from './guards';
 
 Vue.use(VueRouter);
@@ -28,13 +38,26 @@ const routes: Array<RouteConfig> = [
     component: Register,
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    path: '/transaction',
+    component: Transaction,
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: '',
+        name: TransactionListRouteName,
+        component: TransactionList,
+      },
+      {
+        path: 'add',
+        name: TransactionAddRouteName,
+        component: TransactionEdit,
+      },
+      {
+        path: 'edit/:id',
+        name: TransactionEditRouteName,
+        component: TransactionEdit,
+      },
+    ],
   },
 ];
 

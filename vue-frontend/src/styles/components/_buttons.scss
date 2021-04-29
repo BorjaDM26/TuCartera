@@ -13,3 +13,19 @@
     color: $white;
   }
 }
+
+.red-button {
+  background-color: $red;
+  color: $white;
+
+  &:hover,
+  &:disabled {
+    background-color: $red;
+    color: $white;
+    opacity: 0.6;
+  }
+
+  &:focus {
+    color: $white;
+  }
+}
