@@ -27,6 +27,7 @@ namespace TuCartera.Automapper
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.transaction_id))
                 .ForMember(dest => dest.Shares, opt => opt.MapFrom(src => src.transaction_shares))
                 .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.transaction_unit_price))
+                .ForMember(dest => dest.ExchangeToUSD, opt => opt.MapFrom(src => src.transaction_exchange))
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.transaction_date))
                 .ForMember(dest => dest.Comment, opt => opt.MapFrom(src => src.transaction_comment))
                 .ForMember(dest => dest.TickerId, opt => opt.MapFrom(src => src.ticker_id))

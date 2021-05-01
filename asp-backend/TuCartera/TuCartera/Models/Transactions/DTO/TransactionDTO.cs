@@ -10,6 +10,7 @@ namespace TuCartera.Models
         public int Id { get; set; }
         public int Shares { get; set; }
         public float UnitPrice { get; set; }
+        public float ExchangeToUSD { get; set; }
         public DateTime Date { get; set; }
         public string Comment { get; set; }
         public int TickerId { get; set; }
