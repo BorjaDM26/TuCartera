@@ -46,6 +46,7 @@ export default class TransactionEdit extends Vue {
     id: -1,
     shares: 0,
     unitPrice: 0,
+    exchangeToUSD: 1,
     date: new Date(),
     tickerId: 0,
     currencyId: 0,
@@ -71,6 +72,7 @@ export default class TransactionEdit extends Vue {
         id: transaction.id,
         shares: transaction.shares,
         unitPrice: transaction.unitPrice,
+        exchangeToUSD: transaction.exchangeToUSD,
         date: transaction.date,
         tickerId: transaction.tickerId,
         currencyId: transaction.currencyId,
@@ -122,6 +124,7 @@ export default class TransactionEdit extends Vue {
       const req: TransactionAddRequest = {
         shares: transaction.shares,
         unitPrice: transaction.unitPrice,
+        exchangeToUSD: transaction.exchangeToUSD,
         date: formatDateToAPI(transaction.date),
         comment: transaction.comment,
         tickerId: transaction.tickerId,
@@ -131,7 +134,7 @@ export default class TransactionEdit extends Vue {
 
       await this.transactionCtx.actions.addTransaction(req);
       if (
-        this.transactionCtx.state.fetchTransactionAddStatus !==
+        this.transactionCtx.state.fetchTransactionAddStatus ===
         FetchStatus.SUCCESS
       ) {
         this.$router.go(-1);
@@ -144,6 +147,7 @@ export default class TransactionEdit extends Vue {
         id: transaction.id,
         shares: transaction.shares,
         unitPrice: transaction.unitPrice,
+        exchangeToUSD: transaction.exchangeToUSD,
         date: formatDateToAPI(transaction.date),
         comment: transaction.comment,
         tickerId: transaction.tickerId,
@@ -153,7 +157,7 @@ export default class TransactionEdit extends Vue {
 
       await this.transactionCtx.actions.editTransaction(req);
       if (
-        this.transactionCtx.state.fetchTransactionEditStatus !==
+        this.transactionCtx.state.fetchTransactionEditStatus ===
         FetchStatus.SUCCESS
       ) {
         this.$router.go(-1);

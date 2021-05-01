@@ -24,39 +24,55 @@ GO
 
 
 /*-- Currency --*/
-INSERT INTO [dbo].[currency] (name, code) VALUES('Dolar estadounidense', 'USD');
-INSERT INTO [dbo].[currency] (name, code) VALUES ('Euro', 'EUR');
+INSERT INTO [dbo].[currency] (name, code) 
+VALUES
+	('Dolar estadounidense', 'USD'),
+	('Euro', 'EUR');
 
 
 /*-- Portfolio --*/
-INSERT INTO [dbo].[portfolio] (name, is_global, description, user_id) VALUES ('Tecnológicas', 0, 'Empresas tecnológicas', '1');
-INSERT INTO [dbo].[portfolio] (name, is_global, description, user_id) VALUES ('Turísticas', 0, 'Empresas turísticas', '1');
+INSERT INTO [dbo].[portfolio] (name, is_global, description, user_id) 
+VALUES 
+	('Tecnológicas', 0, 'Empresas tecnológicas', 1),
+	('Turísticas', 0, 'Empresas turísticas', 1);
 
 
 /*-- Ticker --*/
-INSERT INTO [dbo].[ticker] (code, name) VALUES ('AAPL', 'Apple');
-INSERT INTO [dbo].[ticker] (code, name) VALUES ('INTC', 'Intel Corp');
-INSERT INTO [dbo].[ticker] (code, name) VALUES ('MCD',  'McDonalds Corp');
-INSERT INTO [dbo].[ticker] (code, name) VALUES ('MSFT', 'Microsoft Corp');
+INSERT INTO [dbo].[ticker] (code, name) 
+VALUES 
+	('AAPL', 'Apple'),
+	('INTC', 'Intel Corp'),
+	('MCD',  'McDonalds Corp'),
+	('MSFT', 'Microsoft Corp');
 
 
 /*-- Portfolio tickers --*/
-INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) VALUES ('3', '1');
-INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) VALUES ('3', '2');
-INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) VALUES ('4', '3');
-INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) VALUES ('3', '4');
+INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) 
+VALUES
+	(3, 1),
+	(3, 2),
+	(4, 3),
+	(3, 4);
 
 
 /*-- Transaction type --*/
-INSERT INTO [dbo].[transaction_type] (type, description) VALUES ('Compra', 'Adquisición de acciones de una empresa');
-INSERT INTO [dbo].[transaction_type] (type, description) VALUES ('Venta', 'Venta de acciones de una empresa');
-INSERT INTO [dbo].[transaction_type] (type, description) VALUES ('Dividendo', 'Reparto de beneficios de la empresa');
-INSERT INTO [dbo].[transaction_type] (type, description) VALUES ('Comision', 'Gastos derivados de operar o mantener las acciones');
+INSERT INTO [dbo].[transaction_type] (type, description) 
+VALUES
+	('Compra', 'Adquisición de acciones de una empresa'),
+	('Venta', 'Venta de acciones de una empresa'),
+	('Dividendo', 'Reparto de beneficios de la empresa'),
+	('Comision', 'Gastos derivados de operar o mantener las acciones');
 
 
 /*-- Transaction --*/
-INSERT INTO [dbo].[transaction] (number_of_shares, unit_price, date, comment, user_id, transaction_type_id, currency_id, ticker_id) VALUES ('5', '133.19', '2021-02-17', NULL, '1', '1', '1', '1');
-INSERT INTO [dbo].[transaction] (number_of_shares, unit_price, date, comment, user_id, transaction_type_id, currency_id, ticker_id) VALUES ('10', '60.78', '2021-02-26', NULL, '1', '1', '1', '2');
-INSERT INTO [dbo].[transaction] (number_of_shares, unit_price, date, comment, user_id, transaction_type_id, currency_id, ticker_id) VALUES ('3', '206.14', '2021-02-26', NULL, '1', '1', '1', '3');
-INSERT INTO [dbo].[transaction] (number_of_shares, unit_price, date, comment, user_id, transaction_type_id, currency_id, ticker_id) VALUES ('5', '122.06', '2021-03-03', NULL, '1', '2', '1', '1');
-INSERT INTO [dbo].[transaction] (number_of_shares, unit_price, date, comment, user_id, transaction_type_id, currency_id, ticker_id) VALUES ('5', '227.56', '2021-03-03', NULL, '1', '1', '1', '4');
+INSERT INTO [dbo].[transaction] (number_of_shares, unit_price, exchange_to_usd, date, comment, user_id, transaction_type_id, currency_id, ticker_id) 
+VALUES 
+	(10, 130.84, 0.832086, '2021-02-17', 'Compra 10 en EUR', 1, 1, 2, 1),
+	(20, 122.06, 1,  			 '2021-03-03', 'Compra 20 en USD', 1, 1, 1, 1),
+	(10, 124.76, 0.841893, '2021-03-17', 'Vende  10 en EUR', 1, 2, 2, 1),
+	(30, 122.15, 0.853534, '2021-03-31', 'Compra 30 en EUR', 1, 1, 2, 1),
+	(25, 132.03, 1, 			 '2021-04-14', 'Vende  25 en USD', 1, 2, 1, 1),
+	(10,  60.78, 1, 			 '2021-02-26', NULL, 1, 1, 1, 2),
+	(3,  206.14, 1, 			 '2021-02-26', NULL, 1, 1, 1, 3),
+	(5,   59.90, 1, 			 '2021-03-03', NULL, 1, 2, 1, 2),
+	(5,  227.56, 1, 			 '2021-03-03', NULL, 1, 1, 1, 4);

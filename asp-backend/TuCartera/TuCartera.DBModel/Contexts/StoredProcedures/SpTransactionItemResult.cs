@@ -10,6 +10,7 @@ namespace TuCartera.DBModel.Contexts.Entities
         public int transaction_id { get; set; }
         public decimal transaction_shares { get; set; }
         public decimal transaction_unit_price { get; set; }
+        public decimal transaction_exchange { get; set; }
         public DateTime transaction_date { get; set; }
         public string transaction_comment { get; set; }
         public int ticker_id { get; set; }

@@ -70,6 +70,7 @@ export class TransactionActions extends Actions<
     try {
       this.commit('setFetchTransactionAddStatus', FetchStatus.LOADING);
       await transactionAdd(params);
+      await this.dispatch('fetchTransactions');
       this.commit('setFetchTransactionAddStatus', FetchStatus.SUCCESS);
     } catch (error) {
       this.commit('setFetchTransactionAddStatus', FetchStatus.FAILURE);
@@ -78,11 +79,12 @@ export class TransactionActions extends Actions<
 
   public async editTransaction(params: TransactionEditRequest): Promise<void> {
     try {
-      this.commit('setFetchTransactionAddStatus', FetchStatus.LOADING);
+      this.commit('setFetchTransactionEditStatus', FetchStatus.LOADING);
       await transactionEdit(params);
-      this.commit('setFetchTransactionAddStatus', FetchStatus.SUCCESS);
+      await this.dispatch('fetchTransactions');
+      this.commit('setFetchTransactionEditStatus', FetchStatus.SUCCESS);
     } catch (error) {
-      this.commit('setFetchTransactionAddStatus', FetchStatus.FAILURE);
+      this.commit('setFetchTransactionEditStatus', FetchStatus.FAILURE);
     }
   }
 
@@ -90,12 +92,13 @@ export class TransactionActions extends Actions<
     params: TransactionDeleteRequest
   ): Promise<void> {
     try {
-      this.commit('setFetchTransactionAddStatus', FetchStatus.LOADING);
+      this.commit('setFetchTransactionDeleteStatus', FetchStatus.LOADING);
       await transactionDelete(params);
+      await this.dispatch('fetchTransactions');
       this.commit('deleteTransaction', params.id);
-      this.commit('setFetchTransactionAddStatus', FetchStatus.SUCCESS);
+      this.commit('setFetchTransactionDeleteStatus', FetchStatus.SUCCESS);
     } catch (error) {
-      this.commit('setFetchTransactionAddStatus', FetchStatus.FAILURE);
+      this.commit('setFetchTransactionDeleteStatus', FetchStatus.FAILURE);
     }
   }
 }

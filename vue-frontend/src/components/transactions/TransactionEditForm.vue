@@ -38,7 +38,26 @@
       </validation-provider>
 
       <validation-provider
-        rules="required|min_value:0.00000001"
+        rules="required|min_value:1"
+        name="N de acciones"
+        class="column is-one-third"
+        v-slot="{ errors }"
+      >
+        <b-field
+          label="Nº de acciones"
+          :type="{ 'is-danger': errors[0] }"
+          :message="errors"
+        >
+          <b-input
+            type="number"
+            v-model.number="shares"
+            @keyup.native.enter="save(invalid)"
+          ></b-input>
+        </b-field>
+      </validation-provider>
+
+      <validation-provider
+        rules="required|min_value:0"
         name="Precio unitario"
         class="column is-one-third"
         v-slot="{ errors }"
@@ -86,19 +105,19 @@
       </validation-provider>
 
       <validation-provider
-        rules="required|min_value:1"
-        name="N de acciones"
+        rules="required|min_value:0.00000001"
+        name="Cambio a USD"
         class="column is-one-third"
         v-slot="{ errors }"
       >
         <b-field
-          label="Nº de acciones"
+          label="Cambio a USD"
           :type="{ 'is-danger': errors[0] }"
           :message="errors"
         >
           <b-input
             type="number"
-            v-model.number="shares"
+            v-model.number="exchangeToUSD"
             @keyup.native.enter="save(invalid)"
           ></b-input>
         </b-field>
@@ -211,6 +230,7 @@ export default class TransactionEditForm extends Vue {
   private id = -1;
   private tickerId = 0;
   private unitPrice = 0;
+  private exchangeToUSD = 0;
   private currencyId = 0;
   private shares = 0;
   private transactionTypeId = 0;
@@ -234,6 +254,7 @@ export default class TransactionEditForm extends Vue {
       this.id = transaction.id;
       this.tickerId = transaction.tickerId;
       this.unitPrice = transaction.unitPrice;
+      this.exchangeToUSD = transaction.exchangeToUSD;
       this.currencyId = transaction.currencyId;
       this.shares = transaction.shares;
       this.transactionTypeId = transaction.transactionTypeId;
@@ -243,7 +264,6 @@ export default class TransactionEditForm extends Vue {
   }
 
   private save(isInvalid: boolean): void {
-    console.log('Save', !isInvalid);
     if (isInvalid) {
       this.transactionEditObserver.validate();
       return;
@@ -254,6 +274,7 @@ export default class TransactionEditForm extends Vue {
         id: this.id,
         tickerId: this.tickerId,
         unitPrice: this.unitPrice,
+        exchangeToUSD: this.exchangeToUSD,
         currencyId: this.currencyId,
         shares: this.shares,
         transactionTypeId: this.transactionTypeId,

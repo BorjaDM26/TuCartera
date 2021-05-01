@@ -30,8 +30,8 @@ namespace TuCartera.DBModel
         List<SpTransactionItemResult> TransactionList(int userId);
         SpTransactionItemResult TransactionItem(int transactionId);
 
-        int TransactionAdd(int shares, float price, DateTime date, string comment, int userId, int transactionTypeId, int currencyId, int tickerId);
-        int TransactionEdit(int transactionId, int shares, float price, DateTime date, string comment, int transactionTypeId, int currencyId, int tickerId);
+        int TransactionAdd(int shares, float price, float exchange, DateTime date, string comment, int userId, int transactionTypeId, int currencyId, int tickerId);
+        int TransactionEdit(int transactionId, int shares, float price, float exchange, DateTime date, string comment, int transactionTypeId, int currencyId, int tickerId);
         int TransactionDelete(int transactionId);
 
         #endregion
@@ -154,12 +154,13 @@ namespace TuCartera.DBModel
             }
         }
 
-        public int TransactionAdd(int shares, float price, DateTime date, string comment, int userId, int transactionTypeId, int currencyId, int tickerId)
+        public int TransactionAdd(int shares, float price, float exchange, DateTime date, string comment, int userId, int transactionTypeId, int currencyId, int tickerId)
         {
             try
             {
                 SqlParameter sharesParam = new SqlParameter("@shares", shares);
                 SqlParameter priceParam = new SqlParameter("@price", price);
+                SqlParameter exchangeParam = new SqlParameter("@exchange", exchange);
                 SqlParameter dateParam = new SqlParameter("@date", date);
                 SqlParameter commentParam = !string.IsNullOrEmpty(comment)
                     ? new SqlParameter("@comment", comment)
@@ -168,8 +169,8 @@ namespace TuCartera.DBModel
                 SqlParameter transactionTypeParam = new SqlParameter("@transaction_type_id", transactionTypeId);
                 SqlParameter currencyParam = new SqlParameter("@currency_id", currencyId);
                 SqlParameter tickerParam = new SqlParameter("@ticker_id", tickerId);
-                string sqlQuery = "EXECUTE [dbo].[spTransactionAdd] @shares,@price,@date,@comment,@user_id,@transaction_type_id,@currency_id,@ticker_id";
-                var transactionId = _context.SpTransactionAdd.FromSqlRaw(sqlQuery, sharesParam, priceParam, dateParam, commentParam, userParam, transactionTypeParam, currencyParam, tickerParam)
+                string sqlQuery = "EXECUTE [dbo].[spTransactionAdd] @shares,@price,@exchange,@date,@comment,@user_id,@transaction_type_id,@currency_id,@ticker_id";
+                var transactionId = _context.SpTransactionAdd.FromSqlRaw(sqlQuery, sharesParam, priceParam, exchangeParam, dateParam, commentParam, userParam, transactionTypeParam, currencyParam, tickerParam)
                                      .ToListAsync().GetAwaiter().GetResult().FirstOrDefault().transaction_id;
                 return transactionId;
             }
@@ -179,13 +180,14 @@ namespace TuCartera.DBModel
             }
         }
 
-        public int TransactionEdit(int transactionId, int shares, float price, DateTime date, string comment, int transactionTypeId, int currencyId, int tickerId)
+        public int TransactionEdit(int transactionId, int shares, float price, float exchange, DateTime date, string comment, int transactionTypeId, int currencyId, int tickerId)
         {
             try
             {
                 SqlParameter transactionParam = new SqlParameter("@transaction_id", transactionId);
                 SqlParameter sharesParam = new SqlParameter("@shares", shares);
                 SqlParameter priceParam = new SqlParameter("@price", price);
+                SqlParameter exchangeParam = new SqlParameter("@exchange", exchange);
                 SqlParameter dateParam = new SqlParameter("@date", date);
                 SqlParameter commentParam = !string.IsNullOrEmpty(comment)
                     ? new SqlParameter("@comment", comment)
@@ -193,8 +195,8 @@ namespace TuCartera.DBModel
                 SqlParameter transactionTypeParam = new SqlParameter("@transaction_type_id", transactionTypeId);
                 SqlParameter currencyParam = new SqlParameter("@currency_id", currencyId);
                 SqlParameter tickerParam = new SqlParameter("@ticker_id", tickerId);
-                string sqlQuery = "EXECUTE [dbo].[spTransactionEdit] @transaction_id,@shares,@price,@date,@comment,@transaction_type_id,@currency_id,@ticker_id";
-                var res = _context.SpTransactionEdit.FromSqlRaw(sqlQuery, transactionParam, sharesParam, priceParam, dateParam, commentParam, transactionTypeParam, currencyParam, tickerParam)
+                string sqlQuery = "EXECUTE [dbo].[spTransactionEdit] @transaction_id,@shares,@price,@exchange,@date,@comment,@transaction_type_id,@currency_id,@ticker_id";
+                var res = _context.SpTransactionEdit.FromSqlRaw(sqlQuery, transactionParam, sharesParam, priceParam, exchangeParam, dateParam, commentParam, transactionTypeParam, currencyParam, tickerParam)
                                      .ToListAsync().GetAwaiter().GetResult().FirstOrDefault().transaction_id;
                 return res;
             }
