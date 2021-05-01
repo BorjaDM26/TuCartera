@@ -64,7 +64,8 @@ namespace TuCartera.Controllers
             var userId = _usersService.getLoggedUserId();
             int transactionId = _adapter.TransactionAdd(
                 param.Shares, 
-                param.UnitPrice, 
+                param.UnitPrice,
+                param.ExchangeToUSD,
                 param.Date, 
                 param.Comment, 
                 userId.Value, 
@@ -92,6 +93,7 @@ namespace TuCartera.Controllers
                 param.Id,
                 param.Shares,
                 param.UnitPrice,
+                param.ExchangeToUSD,
                 param.Date,
                 param.Comment,
                 param.TransactionTypeId,
