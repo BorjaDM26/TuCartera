@@ -83,7 +83,8 @@ CREATE TABLE [tu_cartera_bd].[dbo].[transaction]
     (
      id INTEGER NOT NULL IDENTITY(1,1) , 
      number_of_shares NUMERIC (28) NOT NULL , 
-     unit_price DECIMAL (16,8) NOT NULL , 
+     unit_price DECIMAL (16,8) NOT NULL ,
+     exchange_to_usd DECIMAL (16,8) NOT NULL ,  
      date DATE NOT NULL , 
      comment TEXT , 
      user_id INTEGER NOT NULL , 
@@ -187,8 +188,8 @@ BEGIN
     SET NOCOUNT ON
 
     SELECT TS.[id] as 'transaction_id', TS.[number_of_shares] as 'transaction_shares', 
-           TS.[unit_price] as 'transaction_unit_price', TS.[date] as 'transaction_date', 
-           TS.[comment] as 'transaction_comment', 
+           TS.[unit_price] as 'transaction_unit_price', TS.[exchange_to_usd] as 'transaction_exchange',
+           TS.[date] as 'transaction_date', TS.[comment] as 'transaction_comment', 
            TC.[id] as 'ticker_id', TC.[code] as 'ticker_code', TC.[name] as 'ticker_name', 
            C.[id] as 'currency_id', C.[code] as 'currency_code', 
            TT.[id] as 'transaction_type_id', TT.[type] as 'transaction_type_type'
@@ -208,8 +209,8 @@ BEGIN
     SET NOCOUNT ON
 
     SELECT TS.[id] as 'transaction_id', TS.[number_of_shares] as 'transaction_shares', 
-           TS.[unit_price] as 'transaction_unit_price', TS.[date] as 'transaction_date', 
-           TS.[comment] as 'transaction_comment', 
+           TS.[unit_price] as 'transaction_unit_price', TS.[exchange_to_usd] as 'transaction_exchange',
+           TS.[date] as 'transaction_date', TS.[comment] as 'transaction_comment', 
            TC.[id] as 'ticker_id', TC.[code] as 'ticker_code', TC.[name] as 'ticker_name', 
            C.[id] as 'currency_id', C.[code] as 'currency_code', 
            TT.[id] as 'transaction_type_id', TT.[type] as 'transaction_type_type'
@@ -225,6 +226,7 @@ GO
 CREATE OR ALTER PROCEDURE [spTransactionAdd]
     @shares NUMERIC (28),
     @price DECIMAL (16,8),
+    @exchange DECIMAL (16,8),
     @date DATE,
     @comment TEXT = null,
     @user_id INTEGER,
@@ -238,9 +240,9 @@ BEGIN
     BEGIN TRY
         DECLARE @transaction TABLE([transaction_id] INTEGER);
 
-        INSERT INTO [dbo].[transaction] (number_of_shares, unit_price, date, comment, user_id, transaction_type_id, currency_id, ticker_id)
+        INSERT INTO [dbo].[transaction] (number_of_shares, unit_price, exchange_to_usd, date, comment, user_id, transaction_type_id, currency_id, ticker_id)
           OUTPUT INSERTED.id as 'transaction_id' INTO @transaction
-          VALUES(@shares, @price, @date, @comment, @user_id, @transaction_type_id, @currency_id, @ticker_id);
+          VALUES(@shares, @price, @exchange, @date, @comment, @user_id, @transaction_type_id, @currency_id, @ticker_id);
         
 		SELECT [transaction_id] from @transaction
     END TRY
@@ -255,6 +257,7 @@ CREATE OR ALTER PROCEDURE [spTransactionEdit]
     @transaction_id INTEGER,
     @shares NUMERIC (28),
     @price DECIMAL (16,8),
+    @exchange DECIMAL (16,8),
     @date DATE = null,
     @comment TEXT,
     @transaction_type_id INTEGER,
@@ -268,7 +271,7 @@ BEGIN
         DECLARE @transaction TABLE([transaction_id] INTEGER);
 
         UPDATE [dbo].[transaction]
-          SET [number_of_shares] = @shares, [unit_price] = @price, [date] = @date, [comment] = @comment, 
+          SET [number_of_shares] = @shares, [unit_price] = @price, [exchange_to_usd] = @exchange, [date] = @date, [comment] = @comment, 
               [transaction_type_id] = @transaction_type_id, [currency_id] = @currency_id, [ticker_id] = @ticker_id
           OUTPUT INSERTED.id as 'transaction_id' INTO @transaction
           WHERE [id] = @transaction_id;
@@ -329,7 +332,7 @@ BEGIN
 END
 GO
 
--- Description: Get transaction typr list
+-- Description: Get transaction type list
 CREATE OR ALTER PROCEDURE [spTransactionTypeList]
 AS
 BEGIN
