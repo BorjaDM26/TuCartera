@@ -1,10 +1,5 @@
-export interface TransactionEditRequest {
+import { TransactionAddRequest } from "./transactionAddRequest";
+
+export interface TransactionEditRequest extends TransactionAddRequest {
   id: number;
-  shares: number;
-  unitPrice: number;
-  date: Date;
-  comment?: string;
-  tickerId: number;
-  currencyId: number;
-  transactionTypeId: number;
 }

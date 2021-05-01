@@ -2,6 +2,7 @@ export interface Transaction {
   id: number;
   shares: number;
   unitPrice: number;
+  exchangeToUSD: number;
   date: Date;
   comment?: string;
   tickerId: number;
