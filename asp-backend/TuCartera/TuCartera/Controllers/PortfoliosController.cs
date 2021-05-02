@@ -50,6 +50,18 @@ namespace TuCartera.Controllers
         }
 
 
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult Item([FromRoute] int id)
+        {
+            List<IGrouping<int, SpPortfolioItemResult>> portfolioTickers = _adapter.PortfolioItem(id)
+                                                                                   .GroupBy(pt => pt.portfolio_id)
+                                                                                   .ToList();
+            List<PortfolioDTO> portfolio = _mapper.Map<List<PortfolioDTO>>(portfolioTickers);
+            return Ok(portfolio);
+        }
+
+
         [HttpPost]
         [Route("")]
         public IActionResult Add([FromBody] PortfolioAddParameters param)
