@@ -39,6 +39,13 @@ namespace TuCartera.DBModel
 
         #endregion
 
+        #region Tickers
+
+        List<SpTickerStateResult> TickersStateList(int userId);
+        List<SpTickerItemResult> TickersUsedList(int userId);
+
+        #endregion
+
         #region Selectors
 
         List<SpCurrencyItemResult> CurrencyList();
@@ -298,6 +305,42 @@ namespace TuCartera.DBModel
             catch
             {
                 return -1;
+            }
+        }
+
+        #endregion
+
+        #region Tickers
+
+        public List<SpTickerStateResult> TickersStateList(int userId)
+        {
+            try
+            {
+                SqlParameter userParam = new SqlParameter("@user_id", userId);
+                string sqlQuery = "EXECUTE [dbo].[spTickersState] @user_id";
+                var tickers = _context.SpTickerStateList.FromSqlRaw(sqlQuery, userParam)
+                                     .ToListAsync().GetAwaiter().GetResult();
+                return tickers;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public List<SpTickerItemResult> TickersUsedList(int userId)
+        {
+            try
+            {
+                SqlParameter userParam = new SqlParameter("@user_id", userId);
+                string sqlQuery = "EXECUTE [dbo].[spTickersUsed] @user_id";
+                var tickers = _context.SpTickerList.FromSqlRaw(sqlQuery, userParam)
+                                     .ToListAsync().GetAwaiter().GetResult();
+                return tickers;
+            }
+            catch
+            {
+                return null;
             }
         }
 
