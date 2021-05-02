@@ -318,13 +318,32 @@ BEGIN
     (SELECT P.[id] as 'portfolio_id', P.[name] as 'portfolio_name', P.[is_global] as 'portfolio_global', 
             P.[description] as 'portfolio_description', NULL as 'ticker_id'
     FROM [dbo].[portfolio] as P
-    WHERE P.[user_id] = 1 and P.[is_global] = 1)
+    WHERE P.[user_id] = @user_id and P.[is_global] = 1)
     UNION
     (SELECT P.[id] as 'portfolio_id', P.[name] as 'portfolio_name', P.[is_global] as 'portfolio_global', 
             P.[description] as 'portfolio_description', PT.[ticker_id] as 'ticker_id'
     FROM [dbo].[portfolio] as P, [dbo].[portfolio_tickers] as PT
-    WHERE P.[user_id] = 1 and P.[id] = PT.[portfolio_id])
+    WHERE P.[user_id] = @user_id and P.[id] = PT.[portfolio_id])
     ORDER BY P.[is_global] DESC, P.[name] ASC
+END
+GO
+
+-- Description: Get portfolio item by id
+CREATE OR ALTER PROCEDURE [spPortfolioItem]
+    @portfolio_id INTEGER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    (SELECT P.[id] as 'portfolio_id', P.[name] as 'portfolio_name', P.[is_global] as 'portfolio_global', 
+            P.[description] as 'portfolio_description', NULL as 'ticker_id'
+    FROM [dbo].[portfolio] as P
+    WHERE P.[id] = @portfolio_id and P.[is_global] = 1)
+    UNION
+    (SELECT P.[id] as 'portfolio_id', P.[name] as 'portfolio_name', P.[is_global] as 'portfolio_global', 
+            P.[description] as 'portfolio_description', PT.[ticker_id] as 'ticker_id'
+    FROM [dbo].[portfolio] as P, [dbo].[portfolio_tickers] as PT
+    WHERE P.[id] = @portfolio_id and P.[id] = PT.[portfolio_id])
 END
 GO
 

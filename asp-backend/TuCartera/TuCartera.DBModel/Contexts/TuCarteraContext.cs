@@ -43,6 +43,7 @@ namespace TuCartera.DBModel.Contexts
         public DbSet<SpTransactionEditResult> SpTransactionEdit { get; set; }
         public DbSet<SpTransactionDeleteResult> SpTransactionDelete { get; set; }
         public DbSet<SpPortfolioItemResult> SpPortfolioList { get; set; }
+        public DbSet<SpPortfolioItemResult> SpPortfolioItem { get; set; }
         public DbSet<SpPortfolioAddResult> SpPortfolioAdd { get; set; }
         public DbSet<SpPortfolioEditResult> SpPortfolioEdit { get; set; }
         public DbSet<SpPortfolioDeleteResult> SpPortfolioDelete { get; set; }

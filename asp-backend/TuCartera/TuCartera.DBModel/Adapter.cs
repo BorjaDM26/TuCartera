@@ -22,6 +22,7 @@ namespace TuCartera.DBModel
         #region Portfolios
 
         List<SpPortfolioItemResult> PortfolioList(int userId);
+        List<SpPortfolioItemResult> PortfolioItem(int portfolioId);
         int PortfolioAdd(string name, string description, int userId, List<int> tickerIds);
         int PortfolioEdit(int portfolioId, string name, string description, List<int> TickerIds);
         int PortfolioDelete(int portfolioId);
@@ -135,6 +136,22 @@ namespace TuCartera.DBModel
                 var portfolios = _context.SpPortfolioList.FromSqlRaw(sqlQuery, userParam)
                                      .ToListAsync().GetAwaiter().GetResult();
                 return portfolios;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public List<SpPortfolioItemResult> PortfolioItem(int portfolioId)
+        {
+            try
+            {
+                SqlParameter portfolioParam = new SqlParameter("@portfolio_id", portfolioId);
+                string sqlQuery = "EXECUTE [dbo].[spPortfolioItem] @portfolio_id";
+                var portfolio = _context.SpPortfolioItem.FromSqlRaw(sqlQuery, portfolioParam)
+                                     .ToListAsync().GetAwaiter().GetResult();
+                return portfolio;
             }
             catch
             {
