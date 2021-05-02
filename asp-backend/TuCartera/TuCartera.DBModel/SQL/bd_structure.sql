@@ -422,6 +422,39 @@ BEGIN
 END
 GO
 
+/*-- Tickers --*/
+-- Description: Get user tickers current state
+CREATE OR ALTER PROCEDURE [spTickersState]
+    @user_id INTEGER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT TI.[id] as 'ticker_id', TI.[code] as 'ticker_code', TI.[name] as 'ticker_name',
+        SUM(TR.[number_of_shares] * (CASE WHEN TT.[id] = 1 THEN 1 WHEN TT.[id] = 2 THEN '-1' ELSE 0 END)) as 'current_shares', 
+        SUM(TR.[number_of_shares] * TR.[unit_price] * TR.[exchange_to_usd] * (CASE WHEN TT.[id] IN (1,3) THEN 1 ELSE '-1' END)) as 'total_benefit'
+    FROM [dbo].[ticker] as TI, [dbo].[transaction] as TR, [dbo].[transaction_type] as TT
+    WHERE TR.[user_id] = @user_id and TI.[id] = TR.[ticker_id] and TR.[transaction_type_id] = TT.[id]
+    GROUP BY TI.[id], TI.[code], TI.[name]
+    ORDER BY TI.[code] ASC, TI.[name] ASC;
+END
+GO
+
+-- Description: Get user tickers
+CREATE OR ALTER PROCEDURE [spTickersUsed]
+    @user_id INTEGER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT TI.[id] as 'ticker_id', TI.[code] as 'ticker_code', TI.[name] as 'ticker_name'
+    FROM [dbo].[ticker] as TI, [dbo].[transaction] as TR
+    WHERE TR.[user_id] = @user_id and TI.[id] = TR.[ticker_id]
+    GROUP BY TI.[id], TI.[code], TI.[name]
+    ORDER BY TI.[code] ASC, TI.[name] ASC;
+END
+GO
+
 
 /*-- Common selectors --*/
 -- Description: Get currency list
