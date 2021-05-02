@@ -67,6 +67,13 @@ namespace TuCartera.Automapper
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.ticker_code))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ticker_name));
 
+            CreateMap<SpTickerStateResult, TickerStateDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ticker_id))
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.ticker_code))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ticker_name))
+                .ForMember(dest => dest.CurrentShares, opt => opt.MapFrom(src => src.current_shares))
+                .ForMember(dest => dest.TotalBenefit, opt => opt.MapFrom(src => src.total_benefit));
+
             #endregion
 
             #region Transaction types
