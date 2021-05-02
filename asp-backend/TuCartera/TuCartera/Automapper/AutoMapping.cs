@@ -40,6 +40,17 @@ namespace TuCartera.Automapper
 
             #endregion
 
+            #region Portfolios
+
+            CreateMap<IGrouping<int, SpPortfolioItemResult>, PortfolioDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Key))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FirstOrDefault() != null ? src.FirstOrDefault().portfolio_name : ""))
+                .ForMember(dest => dest.IsGlobal, opt => opt.MapFrom(src => src.FirstOrDefault() != null ? src.FirstOrDefault().portfolio_global : false))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.FirstOrDefault() != null ? src.FirstOrDefault().portfolio_description : null))
+                .ForMember(dest => dest.TickerIds, opt => opt.MapFrom(src => src.Where(item => item.ticker_id != null).Select(item => item.ticker_id).ToList()));
+
+            #endregion
+
             #region Currencies
 
             CreateMap<SpCurrencyItemResult, CurrencyDTO>()
