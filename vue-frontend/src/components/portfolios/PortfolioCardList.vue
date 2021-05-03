@@ -4,7 +4,7 @@
     <b-carousel-list
       v-model="currentIndex"
       :data="portfolios"
-      :items-to-show="$mq | mq({ sm: 1, md: 2, lg: 3, xl: 4 })"
+      :items-to-show="$mq | mq({ xs: 1, md: 2, lg: 3, xl: 4 })"
       :arrow="false"
     >
       <template #item="portfolio">
@@ -74,6 +74,9 @@ export default class PortfolioCardList extends Vue {
     let shownItems = 0;
 
     switch (this.$mq) {
+      case 'xs':
+        shownItems = 1;
+        break;
       case 'sm':
         shownItems = 1;
         break;
