@@ -32,7 +32,7 @@ namespace TuCartera.Controllers
 
         #endregion
 
-        #region Authentication
+        #region Transactions
 
 
         [HttpGet]

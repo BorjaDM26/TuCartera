@@ -41,7 +41,7 @@ CREATE TABLE [tu_cartera_bd].[dbo].[portfolio]
      id INTEGER NOT NULL IDENTITY(1,1) , 
      name VARCHAR (200) NOT NULL ,
      is_global BIT NOT NULL,
-     description TEXT , 
+     description VARCHAR(MAX) , 
      user_id INTEGER NOT NULL,
      CONSTRAINT portfolio_pk PRIMARY KEY (id) ,
      CONSTRAINT portfolio_user_fk FOREIGN KEY (user_id) REFERENCES [tu_cartera_bd].[dbo].[user](id) 
@@ -74,7 +74,7 @@ CREATE TABLE [tu_cartera_bd].[dbo].[transaction_type]
     (
      id INTEGER NOT NULL IDENTITY(1,1) , 
      type VARCHAR (50) NOT NULL , 
-     description TEXT ,
+     description VARCHAR(MAX) ,
      CONSTRAINT transaction_type_pk PRIMARY KEY (id) ,
     )
 GO
@@ -86,7 +86,7 @@ CREATE TABLE [tu_cartera_bd].[dbo].[transaction]
      unit_price DECIMAL (16,8) NOT NULL ,
      exchange_to_usd DECIMAL (16,8) NOT NULL ,  
      date DATE NOT NULL , 
-     comment TEXT , 
+     comment VARCHAR(MAX) , 
      user_id INTEGER NOT NULL , 
      transaction_type_id INTEGER NOT NULL , 
      currency_id INTEGER NOT NULL , 
@@ -228,7 +228,7 @@ CREATE OR ALTER PROCEDURE [spTransactionAdd]
     @price DECIMAL (16,8),
     @exchange DECIMAL (16,8),
     @date DATE,
-    @comment TEXT = null,
+    @comment VARCHAR(MAX) = null,
     @user_id INTEGER,
     @transaction_type_id INTEGER,
     @currency_id INTEGER,
@@ -259,7 +259,7 @@ CREATE OR ALTER PROCEDURE [spTransactionEdit]
     @price DECIMAL (16,8),
     @exchange DECIMAL (16,8),
     @date DATE = null,
-    @comment TEXT,
+    @comment VARCHAR(MAX),
     @transaction_type_id INTEGER,
     @currency_id INTEGER,
     @ticker_id INTEGER
@@ -303,6 +303,174 @@ BEGIN
     BEGIN CATCH
         SELECT -1 as 'transaction_id'
     END CATCH
+END
+GO
+
+
+/*-- Portfolios --*/
+-- Description: Get transactions list of a user
+CREATE OR ALTER PROCEDURE [spPortfolioList]
+    @user_id INTEGER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    (SELECT P.[id] as 'portfolio_id', P.[name] as 'portfolio_name', P.[is_global] as 'portfolio_global', 
+            P.[description] as 'portfolio_description', NULL as 'ticker_id'
+    FROM [dbo].[portfolio] as P
+    WHERE P.[user_id] = @user_id and P.[is_global] = 1)
+    UNION
+    (SELECT P.[id] as 'portfolio_id', P.[name] as 'portfolio_name', P.[is_global] as 'portfolio_global', 
+            P.[description] as 'portfolio_description', PT.[ticker_id] as 'ticker_id'
+    FROM [dbo].[portfolio] as P, [dbo].[portfolio_tickers] as PT
+    WHERE P.[user_id] = @user_id and P.[id] = PT.[portfolio_id])
+    ORDER BY P.[is_global] DESC, P.[name] ASC
+END
+GO
+
+-- Description: Get portfolio item by id
+CREATE OR ALTER PROCEDURE [spPortfolioItem]
+    @portfolio_id INTEGER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    (SELECT P.[id] as 'portfolio_id', P.[name] as 'portfolio_name', P.[is_global] as 'portfolio_global', 
+            P.[description] as 'portfolio_description', NULL as 'ticker_id'
+    FROM [dbo].[portfolio] as P
+    WHERE P.[id] = @portfolio_id and P.[is_global] = 1)
+    UNION
+    (SELECT P.[id] as 'portfolio_id', P.[name] as 'portfolio_name', P.[is_global] as 'portfolio_global', 
+            P.[description] as 'portfolio_description', PT.[ticker_id] as 'ticker_id'
+    FROM [dbo].[portfolio] as P, [dbo].[portfolio_tickers] as PT
+    WHERE P.[id] = @portfolio_id and P.[id] = PT.[portfolio_id])
+END
+GO
+
+-- Description: Add a new portfolio
+CREATE OR ALTER PROCEDURE [spPortfolioAdd]
+    @name VARCHAR (200),
+    @description VARCHAR(MAX) = null,
+    @user_id INTEGER,
+    @ticker_ids VARCHAR (200)
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    BEGIN TRY
+        DECLARE @portfolio TABLE([portfolio_id] INTEGER);
+		DECLARE @ticker TABLE ([ticker_id] INTEGER);
+
+        INSERT INTO [dbo].[portfolio] (name, is_global, description, user_id)
+          OUTPUT INSERTED.id as 'portfolio_id' INTO @portfolio
+          VALUES(@name, 0, @description, @user_id);
+
+		INSERT INTO @ticker
+		  SELECT value as ticker_id 
+		  FROM STRING_SPLIT(@ticker_ids, ',');
+        
+        INSERT INTO [dbo].[portfolio_tickers]
+            SELECT P.[portfolio_id], T.[ticker_id] 
+            FROM @portfolio as P, @ticker as T;
+        
+		SELECT [portfolio_id] from @portfolio
+    END TRY
+    BEGIN CATCH
+        SELECT -1 as 'portfolio_id'
+    END CATCH
+END
+GO
+
+-- Description: Update an existing portfolio
+CREATE OR ALTER PROCEDURE [spPortfolioEdit]
+    @portfolio_id INTEGER,
+    @name VARCHAR (200),
+    @description VARCHAR(MAX) = null,
+    @ticker_ids VARCHAR (200)
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    BEGIN TRY
+        DECLARE @portfolio TABLE([portfolio_id] INTEGER);
+		DECLARE @ticker TABLE ([ticker_id] INTEGER);
+
+        UPDATE [dbo].[portfolio]
+          SET [name] = @name, [description] = @description
+          OUTPUT INSERTED.id as 'portfolio_id' INTO @portfolio
+          WHERE [id] = @portfolio_id;
+
+		INSERT INTO @ticker
+		  SELECT value as ticker_id 
+		  FROM STRING_SPLIT(@ticker_ids, ',');
+
+        DELETE FROM [dbo].[portfolio_tickers]
+            WHERE [portfolio_id] = @portfolio_id;
+        
+        INSERT INTO [dbo].[portfolio_tickers]
+            SELECT P.[portfolio_id], T.[ticker_id] 
+            FROM @portfolio as P, @ticker as T;
+        
+		SELECT [portfolio_id] from @portfolio
+    END TRY
+    BEGIN CATCH
+        SELECT -1 as 'portfolio_id'
+    END CATCH
+END
+GO
+
+-- Description: Delete an existing portfolio
+CREATE OR ALTER PROCEDURE [spPortfolioDelete]
+    @portfolio_id INTEGER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    BEGIN TRY
+        DECLARE @portfolio TABLE([portfolio_id] INTEGER);
+
+        DELETE [dbo].[portfolio]
+          OUTPUT DELETED.id as 'portfolio_id' INTO @portfolio
+          WHERE [id] = @portfolio_id;
+        
+		SELECT [portfolio_id] from @portfolio
+    END TRY
+    BEGIN CATCH
+        SELECT -1 as 'portfolio_id'
+    END CATCH
+END
+GO
+
+/*-- Tickers --*/
+-- Description: Get user tickers current state
+CREATE OR ALTER PROCEDURE [spTickersState]
+    @user_id INTEGER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT TI.[id] as 'ticker_id', TI.[code] as 'ticker_code', TI.[name] as 'ticker_name',
+        SUM(TR.[number_of_shares] * (CASE WHEN TT.[id] = 1 THEN 1 WHEN TT.[id] = 2 THEN '-1' ELSE 0 END)) as 'current_shares', 
+        SUM(TR.[number_of_shares] * TR.[unit_price] * TR.[exchange_to_usd] * (CASE WHEN TT.[id] IN (1,3) THEN 1 ELSE '-1' END)) as 'total_invested'
+    FROM [dbo].[ticker] as TI, [dbo].[transaction] as TR, [dbo].[transaction_type] as TT
+    WHERE TR.[user_id] = @user_id and TI.[id] = TR.[ticker_id] and TR.[transaction_type_id] = TT.[id]
+    GROUP BY TI.[id], TI.[code], TI.[name]
+    ORDER BY TI.[code] ASC, TI.[name] ASC;
+END
+GO
+
+-- Description: Get user tickers
+CREATE OR ALTER PROCEDURE [spTickersUsed]
+    @user_id INTEGER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT TI.[id] as 'ticker_id', TI.[code] as 'ticker_code', TI.[name] as 'ticker_name'
+    FROM [dbo].[ticker] as TI, [dbo].[transaction] as TR
+    WHERE TR.[user_id] = @user_id and TI.[id] = TR.[ticker_id]
+    GROUP BY TI.[id], TI.[code], TI.[name]
+    ORDER BY TI.[code] ASC, TI.[name] ASC;
 END
 GO
 

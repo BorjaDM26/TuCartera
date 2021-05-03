@@ -21,7 +21,11 @@ namespace TuCartera.DBModel
 
         #region Portfolios
 
-
+        List<SpPortfolioItemResult> PortfolioList(int userId);
+        List<SpPortfolioItemResult> PortfolioItem(int portfolioId);
+        int PortfolioAdd(string name, string description, int userId, List<int> tickerIds);
+        int PortfolioEdit(int portfolioId, string name, string description, List<int> TickerIds);
+        int PortfolioDelete(int portfolioId);
 
         #endregion
 
@@ -33,6 +37,13 @@ namespace TuCartera.DBModel
         int TransactionAdd(int shares, float price, float exchange, DateTime date, string comment, int userId, int transactionTypeId, int currencyId, int tickerId);
         int TransactionEdit(int transactionId, int shares, float price, float exchange, DateTime date, string comment, int transactionTypeId, int currencyId, int tickerId);
         int TransactionDelete(int transactionId);
+
+        #endregion
+
+        #region Tickers
+
+        List<SpTickerStateResult> TickersStateList(int userId);
+        List<SpTickerItemResult> TickersUsedList(int userId);
 
         #endregion
 
@@ -116,7 +127,99 @@ namespace TuCartera.DBModel
 
         #region Portfolios
 
+        public List<SpPortfolioItemResult> PortfolioList(int userId)
+        {
+            try
+            {
+                SqlParameter userParam = new SqlParameter("@user_id", userId);
+                string sqlQuery = "EXECUTE [dbo].[spPortfolioList] @user_id";
+                var portfolios = _context.SpPortfolioList.FromSqlRaw(sqlQuery, userParam)
+                                     .ToListAsync().GetAwaiter().GetResult();
+                return portfolios;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
+        public List<SpPortfolioItemResult> PortfolioItem(int portfolioId)
+        {
+            try
+            {
+                SqlParameter portfolioParam = new SqlParameter("@portfolio_id", portfolioId);
+                string sqlQuery = "EXECUTE [dbo].[spPortfolioItem] @portfolio_id";
+                var portfolio = _context.SpPortfolioItem.FromSqlRaw(sqlQuery, portfolioParam)
+                                     .ToListAsync().GetAwaiter().GetResult();
+                return portfolio;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public int PortfolioAdd(string name, string description, int userId, List<int> tickerIds)
+        {
+            try
+            {
+                SqlParameter nameParam = new SqlParameter("@name", name);
+                SqlParameter descriptionParam = !string.IsNullOrEmpty(description)
+                    ? new SqlParameter("@description", description)
+                    : new SqlParameter("@description", DBNull.Value);
+                SqlParameter userParam = new SqlParameter("@user_id", userId);
+                SqlParameter tickersParam = tickerIds.Any()
+                    ? new SqlParameter("@ticker_ids", string.Join(",", tickerIds))
+                    : new SqlParameter("@ticker_ids", DBNull.Value);
+                string sqlQuery = "EXECUTE [dbo].[spPortfolioAdd] @name,@description,@user_id,@ticker_ids";
+                var portfolioId = _context.SpPortfolioAdd.FromSqlRaw(sqlQuery, nameParam, descriptionParam, userParam, tickersParam)
+                                     .ToListAsync().GetAwaiter().GetResult().FirstOrDefault().portfolio_id;
+                return portfolioId;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        public int PortfolioEdit(int portfolioId, string name, string description, List<int> tickerIds)
+        {
+            try
+            {
+                SqlParameter idParam = new SqlParameter("@portfolio_id", portfolioId);
+                SqlParameter nameParam = new SqlParameter("@name", name);
+                SqlParameter descriptionParam = !string.IsNullOrEmpty(description)
+                    ? new SqlParameter("@description", description)
+                    : new SqlParameter("@description", DBNull.Value);
+                SqlParameter tickersParam = tickerIds.Any()
+                    ? new SqlParameter("@ticker_ids", string.Join(",", tickerIds))
+                    : new SqlParameter("@ticker_ids", DBNull.Value);
+                string sqlQuery = "EXECUTE [dbo].[spPortfolioEdit] @portfolio_id,@name,@description,@ticker_ids";
+                var res = _context.SpPortfolioEdit.FromSqlRaw(sqlQuery, idParam, nameParam, descriptionParam, tickersParam)
+                                     .ToListAsync().GetAwaiter().GetResult().FirstOrDefault().portfolio_id;
+                return res;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        public int PortfolioDelete(int portfolioId)
+        {
+            try
+            {
+                SqlParameter portfolioParam = new SqlParameter("@portfolio_id", portfolioId);
+                string sqlQuery = "EXECUTE [dbo].[spPortfolioDelete] @portfolio_id";
+                var res = _context.SpPortfolioDelete.FromSqlRaw(sqlQuery, portfolioParam)
+                                     .ToListAsync().GetAwaiter().GetResult().FirstOrDefault().portfolio_id;
+                return res;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
 
         #endregion
 
@@ -219,6 +322,42 @@ namespace TuCartera.DBModel
             catch
             {
                 return -1;
+            }
+        }
+
+        #endregion
+
+        #region Tickers
+
+        public List<SpTickerStateResult> TickersStateList(int userId)
+        {
+            try
+            {
+                SqlParameter userParam = new SqlParameter("@user_id", userId);
+                string sqlQuery = "EXECUTE [dbo].[spTickersState] @user_id";
+                var tickers = _context.SpTickerStateList.FromSqlRaw(sqlQuery, userParam)
+                                     .ToListAsync().GetAwaiter().GetResult();
+                return tickers;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public List<SpTickerItemResult> TickersUsedList(int userId)
+        {
+            try
+            {
+                SqlParameter userParam = new SqlParameter("@user_id", userId);
+                string sqlQuery = "EXECUTE [dbo].[spTickersUsed] @user_id";
+                var tickers = _context.SpTickerList.FromSqlRaw(sqlQuery, userParam)
+                                     .ToListAsync().GetAwaiter().GetResult();
+                return tickers;
+            }
+            catch
+            {
+                return null;
             }
         }
 

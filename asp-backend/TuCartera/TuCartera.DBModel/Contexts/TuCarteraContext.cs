@@ -42,8 +42,14 @@ namespace TuCartera.DBModel.Contexts
         public DbSet<SpTransactionAddResult> SpTransactionAdd { get; set; }
         public DbSet<SpTransactionEditResult> SpTransactionEdit { get; set; }
         public DbSet<SpTransactionDeleteResult> SpTransactionDelete { get; set; }
-        public DbSet<SpCurrencyItemResult> SpCurrencyList { get; set; }
+        public DbSet<SpPortfolioItemResult> SpPortfolioList { get; set; }
+        public DbSet<SpPortfolioItemResult> SpPortfolioItem { get; set; }
+        public DbSet<SpPortfolioAddResult> SpPortfolioAdd { get; set; }
+        public DbSet<SpPortfolioEditResult> SpPortfolioEdit { get; set; }
+        public DbSet<SpPortfolioDeleteResult> SpPortfolioDelete { get; set; }
         public DbSet<SpTickerItemResult> SpTickerList { get; set; }
+        public DbSet<SpTickerStateResult> SpTickerStateList { get; set; }
+        public DbSet<SpCurrencyItemResult> SpCurrencyList { get; set; }
         public DbSet<SpTransactionTypeItemResult> SpTransactionTypeList { get; set; }
 
         #endregion
@@ -73,8 +79,13 @@ namespace TuCartera.DBModel.Contexts
             modelBuilder.Entity<SpTransactionAddResult>().HasNoKey();
             modelBuilder.Entity<SpTransactionEditResult>().HasNoKey();
             modelBuilder.Entity<SpTransactionDeleteResult>().HasNoKey();
+            modelBuilder.Entity<SpPortfolioItemResult>().HasNoKey();
+            modelBuilder.Entity<SpPortfolioAddResult>().HasNoKey();
+            modelBuilder.Entity<SpPortfolioEditResult>().HasNoKey();
+            modelBuilder.Entity<SpPortfolioDeleteResult>().HasNoKey();
             modelBuilder.Entity<SpCurrencyItemResult>().HasNoKey();
             modelBuilder.Entity<SpTickerItemResult>().HasNoKey();
+            modelBuilder.Entity<SpTickerStateResult>().HasNoKey();
             modelBuilder.Entity<SpTransactionTypeItemResult>().HasNoKey();
 
             #endregion

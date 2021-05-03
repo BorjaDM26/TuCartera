@@ -34,6 +34,8 @@ namespace TuCartera
             // Register custom services
             services.AddHttpContextAccessor();
             services.AddScoped<Services.IUsersService, Services.UsersService>();
+            string fmpApiKey = Configuration.GetConnectionString("FmpApiKey");
+            services.AddScoped<Services.IFinancialApiService, Services.FinancialApiService>(_ => new Services.FinancialApiService(fmpApiKey));
 
             services.AddControllers()
                     .AddJsonOptions(options => {

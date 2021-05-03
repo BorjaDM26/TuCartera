@@ -28,6 +28,12 @@ export class SelectorsActions extends Actions<
     }
   }
 
+  public async initialisePortfolio(): Promise<void> {
+    if (this.state.fetchTickersStatus === FetchStatus.PENDING) {
+      await this.dispatch('fetchTickers');
+    }
+  }
+
   public async fetchCurrencies(): Promise<void> {
     try {
       this.commit('setFetchCurrenciesStatus', FetchStatus.LOADING);

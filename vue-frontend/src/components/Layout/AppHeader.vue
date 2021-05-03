@@ -14,10 +14,12 @@
       </b-navbar-item>
     </template>
     <template #start v-if="isUserLogged">
-      <b-navbar-item href="#">Carteras</b-navbar-item>
-      <b-navbar-item tag="router-link" :to="transactionListRoute"
-        >Transacciones</b-navbar-item
-      >
+      <b-navbar-item tag="router-link" :to="portfolioListRoute">
+        Carteras
+      </b-navbar-item>
+      <b-navbar-item tag="router-link" :to="transactionListRoute">
+        Transacciones
+      </b-navbar-item>
     </template>
 
     <template #end v-if="isUserLogged">
@@ -41,6 +43,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { userStore } from '@/store/user/userStore';
 import {
   LoginRouteName,
+  PortfolioListRouteName,
   RegisterRouteName,
   TransactionListRouteName,
 } from '@/router/routeNames';
@@ -53,6 +56,7 @@ export default class AppHeader extends Vue {
 
   private loginRoute = { name: LoginRouteName };
   private registerRoute = { name: RegisterRouteName };
+  private portfolioListRoute = { name: PortfolioListRouteName };
   private transactionListRoute = { name: TransactionListRouteName };
 
   private get isUserLogged(): boolean {
