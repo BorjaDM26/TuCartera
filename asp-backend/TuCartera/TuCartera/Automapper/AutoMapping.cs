@@ -72,7 +72,7 @@ namespace TuCartera.Automapper
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.ticker_code))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ticker_name))
                 .ForMember(dest => dest.CurrentShares, opt => opt.MapFrom(src => src.current_shares))
-                .ForMember(dest => dest.TotalBenefit, opt => opt.MapFrom(src => src.total_benefit));
+                .ForMember(dest => dest.TotalInvested, opt => opt.MapFrom(src => src.total_invested));
 
             #endregion
 

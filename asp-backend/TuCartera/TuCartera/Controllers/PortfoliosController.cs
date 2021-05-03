@@ -57,7 +57,7 @@ namespace TuCartera.Controllers
             List<IGrouping<int, SpPortfolioItemResult>> portfolioTickers = _adapter.PortfolioItem(id)
                                                                                    .GroupBy(pt => pt.portfolio_id)
                                                                                    .ToList();
-            List<PortfolioDTO> portfolio = _mapper.Map<List<PortfolioDTO>>(portfolioTickers);
+            PortfolioDTO portfolio = _mapper.Map<List<PortfolioDTO>>(portfolioTickers).FirstOrDefault();
             return Ok(portfolio);
         }
 

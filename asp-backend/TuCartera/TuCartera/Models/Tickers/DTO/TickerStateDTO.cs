@@ -11,6 +11,6 @@ namespace TuCartera.Models
         public string Code { get; set; }
         public string Name { get; set; }
         public int CurrentShares { get; set; }
-        public float TotalBenefit { get; set; }
+        public float TotalInvested { get; set; }
     }
 }

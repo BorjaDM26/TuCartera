@@ -11,6 +11,6 @@ namespace TuCartera.DBModel.Contexts.Entities
         public string ticker_code { get; set; }
         public string ticker_name { get; set; }
         public decimal current_shares { get; set; }
-        public decimal total_benefit { get; set; }
+        public decimal total_invested { get; set; }
     }
 }

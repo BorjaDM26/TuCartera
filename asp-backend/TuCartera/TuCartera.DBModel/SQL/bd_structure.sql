@@ -451,7 +451,7 @@ BEGIN
 
     SELECT TI.[id] as 'ticker_id', TI.[code] as 'ticker_code', TI.[name] as 'ticker_name',
         SUM(TR.[number_of_shares] * (CASE WHEN TT.[id] = 1 THEN 1 WHEN TT.[id] = 2 THEN '-1' ELSE 0 END)) as 'current_shares', 
-        SUM(TR.[number_of_shares] * TR.[unit_price] * TR.[exchange_to_usd] * (CASE WHEN TT.[id] IN (1,3) THEN 1 ELSE '-1' END)) as 'total_benefit'
+        SUM(TR.[number_of_shares] * TR.[unit_price] * TR.[exchange_to_usd] * (CASE WHEN TT.[id] IN (1,3) THEN 1 ELSE '-1' END)) as 'total_invested'
     FROM [dbo].[ticker] as TI, [dbo].[transaction] as TR, [dbo].[transaction_type] as TT
     WHERE TR.[user_id] = @user_id and TI.[id] = TR.[ticker_id] and TR.[transaction_type_id] = TT.[id]
     GROUP BY TI.[id], TI.[code], TI.[name]
