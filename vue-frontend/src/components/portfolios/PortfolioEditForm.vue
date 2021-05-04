@@ -34,26 +34,32 @@
         v-slot="{ errors }"
       >
         <b-field
-          label="Ticker"
+          label="Tickers"
+          class="ticker-selector"
           :type="{ 'is-danger': errors[0] }"
           :message="errors"
         >
-          <b-select
-            placeholder="Seleccione un ticker"
-            required
-            multiple
+          <b-dropdown
             v-model="tickerIds"
-            expanded
+            multiple
+            aria-role="list"
             @keyup.native.enter="save(invalid)"
           >
-            <option
+            <template #trigger>
+              <b-button :class="{ 'dropdown-error': errors[0] }">
+                {{ tickerPlaceholder }}
+              </b-button>
+            </template>
+
+            <b-dropdown-item
               v-for="ticker in tickers"
               :key="ticker.id"
               :value="ticker.id"
+              aria-role="listitem"
             >
-              {{ `${ticker.code} - ${ticker.name}` }}
-            </option>
-          </b-select>
+              <span>{{ `${ticker.code} - ${ticker.name}` }}</span>
+            </b-dropdown-item>
+          </b-dropdown>
         </b-field>
       </validation-provider>
 
@@ -97,6 +103,8 @@ import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
 import { Portfolio, Ticker } from '@/models/api';
 
+const maxTickersShown = 4;
+
 @Component({
   name: 'PortfolioEditForm',
   components: {
@@ -136,6 +144,22 @@ export default class PortfolioEditForm extends Vue {
     }
   }
 
+  private get tickerPlaceholder(): string {
+    const { tickerIds, tickers } = this;
+    if (!tickerIds.length) {
+      return 'Seleccione al menos un ticker';
+    } else {
+      const tickerCodes = tickers
+        .filter(ticker => tickerIds.includes(ticker.id))
+        .map(ticker => ticker.code);
+      if (tickerCodes.length <= maxTickersShown) {
+        return tickerCodes.join(', ');
+      } else {
+        return tickerCodes.slice(0, maxTickersShown).join(', ') + ', ...';
+      }
+    }
+  }
+
   private save(isInvalid: boolean): void {
     if (isInvalid) {
       this.portfolioEditObserver.validate();
@@ -159,4 +183,33 @@ export default class PortfolioEditForm extends Vue {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.ticker-selector /deep/ {
+  & .dropdown {
+    &,
+    &-trigger,
+    &-trigger button,
+    &-menu {
+      width: 100%;
+    }
+
+    &-trigger button {
+      justify-content: flex-start;
+    }
+
+    &-content {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+  }
+
+  & a.dropdown-item.is-active {
+    background-color: $blue-active;
+  }
+}
+
+.dropdown-error {
+  color: $red;
+  border-color: $red;
+}
+</style>
