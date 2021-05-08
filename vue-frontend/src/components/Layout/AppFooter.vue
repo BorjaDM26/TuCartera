@@ -24,7 +24,6 @@ import { Component, Vue } from 'vue-property-decorator';
 })
 export default class AppFooter extends Vue {
   private get isSmallScreen(): boolean {
-    console.log('MQ', this.$mq, ['xs', 'sm'].includes(this.$mq));
     return ['xs', 'sm'].includes(this.$mq);
   }
 }

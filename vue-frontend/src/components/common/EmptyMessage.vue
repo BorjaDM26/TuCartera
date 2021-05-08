@@ -8,9 +8,9 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component({
-  name: 'CustomLoading',
+  name: 'EmptyMessage',
 })
-export default class CustomLoading extends Vue {
+export default class EmptyMessage extends Vue {
   @Prop({ default: 'No hay datos disponibles' }) readonly message!: string;
 }
 </script>
