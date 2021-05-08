@@ -18,7 +18,10 @@ import {
 } from '@/webservices/portfolios/models';
 import { FetchStatus } from '@/models/enum';
 import { Portfolio } from '@/models/api';
-import { tickersState, tickersValue } from '@/webservices/tickers/tickerWebservices';
+import {
+  tickersState,
+  tickersValue,
+} from '@/webservices/tickers/tickerWebservices';
 
 export class PortfolioActions extends Actions<
   PortfolioState,
