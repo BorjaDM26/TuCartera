@@ -38,21 +38,18 @@ VALUES
 
 
 /*-- Ticker --*/
-INSERT INTO [dbo].[ticker] (code, name) 
-VALUES 
-	('AAPL', 'Apple'),
-	('INTC', 'Intel Corp'),
-	('MCD',  'McDonalds Corp'),
-	('MSFT', 'Microsoft Corp');
+EXEC	[dbo].[spTickersPopulate]
+ 			@api_key = N'' --Insert external API key
+GO
 
 
 /*-- Portfolio tickers --*/
 INSERT INTO [dbo].[portfolio_tickers] (portfolio_id, ticker_id) 
 VALUES
-	(3, 1),
-	(3, 2),
-	(4, 3),
-	(3, 4);
+	(3, 11),
+	(3, 4),
+	(4, 831),
+	(3, 12);
 
 
 /*-- Transaction type --*/
@@ -67,12 +64,12 @@ VALUES
 /*-- Transaction --*/
 INSERT INTO [dbo].[transaction] (number_of_shares, unit_price, exchange_to_usd, date, comment, user_id, transaction_type_id, currency_id, ticker_id) 
 VALUES 
-	(10, 130.84, 0.832086, '2021-02-17', 'Compra 10 en EUR', 1, 1, 2, 1),
-	(20, 122.06, 1,  			 '2021-03-03', 'Compra 20 en USD', 1, 1, 1, 1),
-	(10, 124.76, 0.841893, '2021-03-17', 'Vende  10 en EUR', 1, 2, 2, 1),
-	(30, 122.15, 0.853534, '2021-03-31', 'Compra 30 en EUR', 1, 1, 2, 1),
-	(25, 132.03, 1, 			 '2021-04-14', 'Vende  25 en USD', 1, 2, 1, 1),
-	(10,  60.78, 1, 			 '2021-02-26', NULL, 1, 1, 1, 2),
-	(3,  206.14, 1, 			 '2021-02-26', NULL, 1, 1, 1, 3),
-	(5,   59.90, 1, 			 '2021-03-03', NULL, 1, 2, 1, 2),
-	(5,  227.56, 1, 			 '2021-03-03', NULL, 1, 1, 1, 4);
+	(10, 130.84, 0.832086, '2021-02-17', 'Compra 10 en EUR', 1, 1, 2, 11),
+	(20, 122.06, 1,  			 '2021-03-03', 'Compra 20 en USD', 1, 1, 1, 11),
+	(10, 124.76, 0.841893, '2021-03-17', 'Vende  10 en EUR', 1, 2, 2, 11),
+	(30, 122.15, 0.853534, '2021-03-31', 'Compra 30 en EUR', 1, 1, 2, 11),
+	(25, 132.03, 1, 			 '2021-04-14', 'Vende  25 en USD', 1, 2, 1, 11),
+	(10,  60.78, 1, 			 '2021-02-26', NULL, 1, 1, 1, 4),
+	(3,  206.14, 1, 			 '2021-02-26', NULL, 1, 1, 1, 831),
+	(5,   59.90, 1, 			 '2021-03-03', NULL, 1, 2, 1, 4),
+	(5,  227.56, 1, 			 '2021-03-03', NULL, 1, 1, 1, 12);
