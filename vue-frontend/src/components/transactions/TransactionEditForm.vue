@@ -248,7 +248,7 @@ export default class TransactionEditForm extends Vue {
   private transactionTypeId = 0;
   private date: Date = new Date();
   private comment = '';
-  
+
   private tickerCode = '';
   private tickerFilter = '';
   private tickerModified = false;
@@ -277,10 +277,11 @@ export default class TransactionEditForm extends Vue {
       this.transactionTypeId = transaction.transactionTypeId;
       this.date = transaction.date;
       this.comment = transaction.comment ?? '';
-      
+
       if (transaction.tickerId) {
-        this.tickerCode = tickers
-          .find(ticker => transaction.tickerId === ticker.id)?.code ?? '';
+        this.tickerCode =
+          tickers.find(ticker => transaction.tickerId === ticker.id)?.code ??
+          '';
       }
     }
   }
