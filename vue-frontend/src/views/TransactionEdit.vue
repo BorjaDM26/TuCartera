@@ -10,6 +10,7 @@
       :message="message"
       @save="save"
     />
+    <custom-loading :isLoading="isLoading" />
   </div>
 </template>
 
@@ -20,6 +21,8 @@ import { transactionStore } from '@/store/transaction/transactionStore';
 import { selectorsStore } from '@/store/selectors/selectorsStore';
 
 import TransactionEditForm from '@/components/transactions/TransactionEditForm.vue';
+import CustomLoading from '@/components/common/CustomLoading.vue';
+
 import { TransactionEditRouteName } from '@/router/routeNames';
 import { Currency, Ticker, Transaction, TransactionType } from '@/models/api';
 import { FetchStatus } from '@/models/enum';
@@ -34,6 +37,7 @@ import { formatDateToAPI } from '@/utils/dates';
   name: 'TransactionEdit',
   components: {
     TransactionEditForm,
+    CustomLoading,
   },
 })
 export default class TransactionEdit extends Vue {
@@ -166,6 +170,10 @@ export default class TransactionEdit extends Vue {
           'Ha habido un problema al editar la transacción. Por favor, vuelva a intentarlo más tarde.';
       }
     }
+  }
+
+  private get isLoading(): boolean {
+    return this.selectorsCtx.getters.isLoading;
   }
 }
 </script>
