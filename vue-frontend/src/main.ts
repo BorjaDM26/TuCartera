@@ -21,6 +21,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import '@/validation/formValidation';
 import { ValidationProvider } from 'vee-validate';
 
+import VueVirtualScroller from 'vue-virtual-scroller';
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
+
+Vue.use(VueVirtualScroller);
+
 Vue.use(Buefy);
 
 Vue.use(VueMq, {

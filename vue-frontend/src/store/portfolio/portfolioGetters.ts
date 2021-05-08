@@ -30,18 +30,18 @@ export class PortfolioGetters extends Getters<PortfolioState> {
 
     tickersState.forEach(state => {
       const tickerValue = tickersValue.find(value => value.id === state.id);
-      const currentValue = tickerValue?.currentValue ?? -1;
+      const currentValue = tickerValue?.currentValue ?? 0;
       const row: TickerRow = {
         id: state.id,
         code: state.code,
         name: state.name,
         bep:
-          state.currentShares !== 0
+          state.currentShares > 0
             ? state.totalInvested / state.currentShares
-            : -1,
+            : 0,
         currentValue,
         benefit: currentValue * state.currentShares - state.totalInvested,
-        totatValue: state.currentShares * currentValue,
+        totalValue: state.currentShares * currentValue,
       };
       tickersInfo.push(row);
     });
@@ -61,7 +61,7 @@ export class PortfolioGetters extends Getters<PortfolioState> {
       const portfolioValues = tickersInPortfolio.reduce(
         (acc, val) => {
           return {
-            totalValue: acc.totalValue + val.totatValue,
+            totalValue: acc.totalValue + val.totalValue,
             benefit: acc.benefit + val.benefit,
           };
         },

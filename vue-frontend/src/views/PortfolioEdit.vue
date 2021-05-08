@@ -8,6 +8,7 @@
       :message="message"
       @save="save"
     />
+    <custom-loading :isLoading="isLoading" />
   </div>
 </template>
 
@@ -18,6 +19,8 @@ import { portfolioStore } from '@/store/portfolio/portfolioStore';
 import { selectorsStore } from '@/store/selectors/selectorsStore';
 
 import PortfolioEditForm from '@/components/portfolios/PortfolioEditForm.vue';
+import CustomLoading from '@/components/common/CustomLoading.vue';
+
 import { HomeRouteName, PortfolioEditRouteName } from '@/router/routeNames';
 import { Portfolio, Ticker } from '@/models/api';
 import { FetchStatus } from '@/models/enum';
@@ -31,6 +34,7 @@ import {
   name: 'PortfolioEdit',
   components: {
     PortfolioEditForm,
+    CustomLoading,
   },
 })
 export default class PortfolioEdit extends Vue {
@@ -137,6 +141,10 @@ export default class PortfolioEdit extends Vue {
           'Ha habido un problema al editar la cartera. Por favor, vuelva a intentarlo más tarde.';
       }
     }
+  }
+
+  private get isLoading(): boolean {
+    return this.selectorsCtx.getters.isLoading;
   }
 }
 </script>

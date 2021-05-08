@@ -451,7 +451,7 @@ BEGIN
 
     SELECT TI.[id] as 'ticker_id', TI.[code] as 'ticker_code', TI.[name] as 'ticker_name',
         SUM(TR.[number_of_shares] * (CASE WHEN TT.[id] = 1 THEN 1 WHEN TT.[id] = 2 THEN '-1' ELSE 0 END)) as 'current_shares', 
-        SUM(TR.[number_of_shares] * TR.[unit_price] * TR.[exchange_to_usd] * (CASE WHEN TT.[id] IN (1,3) THEN 1 ELSE '-1' END)) as 'total_invested'
+        SUM(TR.[number_of_shares] * TR.[unit_price] * TR.[exchange_to_usd] * (CASE WHEN TT.[id] IN (1,4) THEN 1 ELSE '-1' END)) as 'total_invested'
     FROM [dbo].[ticker] as TI, [dbo].[transaction] as TR, [dbo].[transaction_type] as TT
     WHERE TR.[user_id] = @user_id and TI.[id] = TR.[ticker_id] and TR.[transaction_type_id] = TT.[id]
     GROUP BY TI.[id], TI.[code], TI.[name]
@@ -471,6 +471,49 @@ BEGIN
     WHERE TR.[user_id] = @user_id and TI.[id] = TR.[ticker_id]
     GROUP BY TI.[id], TI.[code], TI.[name]
     ORDER BY TI.[code] ASC, TI.[name] ASC;
+END
+GO
+
+-- Description: Populate tickers table from external API
+CREATE OR ALTER PROCEDURE [spTickersPopulate]
+    @api_key VARCHAR (32)
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    DECLARE @token INT;
+    DECLARE @ret INT;
+    DECLARE @url NVARCHAR(MAX);
+    DECLARE @json AS TABLE(Json_Table NVARCHAR(MAX));
+    DECLARE @tickers_count INT;
+
+    SELECT @tickers_count = COUNT(*) FROM [dbo].[ticker];
+
+    IF @tickers_count = 0
+    BEGIN
+        SET @url = 'https://financialmodelingprep.com/api/v3/stock/list?apikey=' + @api_key;
+
+        -- Creates the new object
+        EXEC @ret = sp_OACreate 'MSXML2.XMLHTTP', @token OUT;
+        IF @ret <> 0 RAISERROR('Unable to open HTTP connection.', 10, 1);
+
+        -- Calls the necessary methods
+        EXEC @ret = sp_OAMethod @token, 'open', NULL, 'GET', @url, 'false';
+        EXEC @ret = sp_OAMethod @token, 'send';
+
+        -- Grab the responseText property and insert the JSON string into the table
+        INSERT into @json (Json_Table) EXEC sp_OAGetProperty @token, 'responseText'
+
+        -- Select the JSON string from the Table we just inserted it into. You'll also be able to see the entire string with this statement.
+        INSERT INTO [dbo].[ticker] ([code], [name])
+        SELECT symbol as code, name
+        FROM OPENJSON((SELECT * FROM @json))
+        CROSS APPLY OPENJSON([value])
+        WITH(
+            [symbol] NVARCHAR(10),
+            [name] NVARCHAR(200)
+        )
+    END
 END
 GO
 

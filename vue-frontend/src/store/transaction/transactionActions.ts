@@ -1,4 +1,5 @@
-import { Actions } from 'vuex-smart-module';
+import { Store } from 'vuex';
+import { Actions, Context } from 'vuex-smart-module';
 import { TransactionGetters } from './transactionGetters';
 import { TransactionMutations } from './transactionMutations';
 import { TransactionState } from './transactionState';
@@ -18,6 +19,7 @@ import {
 } from '@/webservices/transactions/models';
 import { FetchStatus } from '@/models/enum';
 import { Transaction } from '@/models/api';
+import { portfolioStore } from '../portfolio/portfolioStore';
 
 export class TransactionActions extends Actions<
   TransactionState,
@@ -25,6 +27,12 @@ export class TransactionActions extends Actions<
   TransactionMutations,
   TransactionActions
 > {
+  public portfolioCtx!: Context<typeof portfolioStore>;
+
+  $init(store: Store<any>): void {
+    this.portfolioCtx = portfolioStore.context(store);
+  }
+
   public async initialise(): Promise<void> {
     if (this.state.fetchTransactionsStatus === FetchStatus.PENDING) {
       await this.dispatch('fetchTransactions');
@@ -71,6 +79,7 @@ export class TransactionActions extends Actions<
       this.commit('setFetchTransactionAddStatus', FetchStatus.LOADING);
       await transactionAdd(params);
       await this.dispatch('fetchTransactions');
+      await this.portfolioCtx.dispatch('fetchTickersState');
       this.commit('setFetchTransactionAddStatus', FetchStatus.SUCCESS);
     } catch (error) {
       this.commit('setFetchTransactionAddStatus', FetchStatus.FAILURE);
@@ -82,6 +91,7 @@ export class TransactionActions extends Actions<
       this.commit('setFetchTransactionEditStatus', FetchStatus.LOADING);
       await transactionEdit(params);
       await this.dispatch('fetchTransactions');
+      await this.portfolioCtx.dispatch('fetchTickersState');
       this.commit('setFetchTransactionEditStatus', FetchStatus.SUCCESS);
     } catch (error) {
       this.commit('setFetchTransactionEditStatus', FetchStatus.FAILURE);
@@ -96,6 +106,7 @@ export class TransactionActions extends Actions<
       await transactionDelete(params);
       await this.dispatch('fetchTransactions');
       this.commit('deleteTransaction', params.id);
+      await this.portfolioCtx.dispatch('fetchTickersState');
       this.commit('setFetchTransactionDeleteStatus', FetchStatus.SUCCESS);
     } catch (error) {
       this.commit('setFetchTransactionDeleteStatus', FetchStatus.FAILURE);
