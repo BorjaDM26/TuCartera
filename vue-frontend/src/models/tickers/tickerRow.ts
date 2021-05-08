@@ -4,6 +4,6 @@ export interface TickerRow {
   name: string;
   bep: number;
   currentValue: number;
-  totatValue: number;
+  totalValue: number;
   benefit: number;
 }

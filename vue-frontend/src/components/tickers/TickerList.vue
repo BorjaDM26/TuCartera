@@ -88,7 +88,9 @@ export default class TickerList extends Vue {
   @Prop(Array) readonly tickers!: TickerRow[];
 
   private getBenefitPercentage(ticker: TickerRow): string {
-    const percentage = (ticker.currentValue / ticker.bep - 1) * 100;
+    const percentage = ticker.bep > 0 
+      ? (ticker.currentValue / ticker.bep - 1) * 100
+      : 0;
     return percentage.toFixed(2);
   }
 }
