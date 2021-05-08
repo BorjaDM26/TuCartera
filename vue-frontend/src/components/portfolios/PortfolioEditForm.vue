@@ -27,41 +27,46 @@
         </b-field>
       </validation-provider>
 
-      <validation-provider
-        rules="required"
-        name="Tickers"
-        class="column is-one-third"
-        v-slot="{ errors }"
-      >
-        <b-field
-          label="Tickers"
-          class="ticker-selector"
-          :type="{ 'is-danger': errors[0] }"
-          :message="errors"
+      <b-field label="Tickers" class="column is-one-third ticker-selector">
+        <b-dropdown
+          v-model="tickerIds"
+          multiple
+          @keyup.native.enter="save(invalid)"
         >
-          <b-dropdown
-            v-model="tickerIds"
-            multiple
-            aria-role="list"
-            @keyup.native.enter="save(invalid)"
-          >
-            <template #trigger>
-              <b-button :class="{ 'dropdown-error': errors[0] }">
-                {{ tickerPlaceholder }}
-              </b-button>
-            </template>
+          <template #trigger>
+            <b-button :class="{ 'dropdown-error': showTickerError }">
+              {{ tickerPlaceholder }}
+            </b-button>
+          </template>
 
-            <b-dropdown-item
-              v-for="ticker in tickers"
-              :key="ticker.id"
-              :value="ticker.id"
-              aria-role="listitem"
+          <b-field class="ticker-dropdown_filter">
+            <b-input
+              v-model="tickerFilter"
+              type="text"
+              placeholder="Filtro"
+            ></b-input>
+          </b-field>
+
+          <recycle-scroller
+            class="scroller"
+            :items="tickersFiltered"
+            :item-size="32"
+            key-field="id"
+            v-slot="{ item }"
+          >
+            <span
+              class="ticker-dropdown_item"
+              :class="{
+                'ticker-dropdown_item--active': tickerIds.includes(item.id),
+              }"
+              @click="tickerItemClicked(item)"
             >
-              <span>{{ `${ticker.code} - ${ticker.name}` }}</span>
-            </b-dropdown-item>
-          </b-dropdown>
-        </b-field>
-      </validation-provider>
+              {{ `${item.code} - ${item.name}` }}
+            </span>
+          </recycle-scroller>
+        </b-dropdown>
+        <p class="help is-danger" v-if="showTickerError">Campo obligatorio</p>
+      </b-field>
 
       <validation-provider
         name="Descripcion"
@@ -81,7 +86,7 @@
         <button
           class="button green-button portfolio-form_submit-button"
           @click="save(invalid)"
-          :disabled="invalid"
+          :disabled="invalid || tickerIds.length === 0"
         >
           Guardar
         </button>
@@ -122,6 +127,9 @@ export default class PortfolioEditForm extends Vue {
   private name = '';
   private description = '';
   private tickerIds: number[] = [];
+  private tickerCodes: string[] = [];
+  private tickerFilter = '';
+  private tickersModified = false;
 
   created(): void {
     this.loadFormData(this.portfolioInput);
@@ -135,23 +143,35 @@ export default class PortfolioEditForm extends Vue {
   @Ref()
   readonly portfolioEditObserver!: InstanceType<typeof ValidationObserver>;
 
+  private get tickersFiltered(): Ticker[] {
+    return this.tickers.filter(ticker =>
+      `${ticker.code} - ${ticker.name}`
+        .toUpperCase()
+        .includes(this.tickerFilter.toUpperCase())
+    );
+  }
+
   private loadFormData(portfolio: Portfolio | null): void {
+    const { tickers } = this;
     if (portfolio) {
       this.id = portfolio.id;
       this.name = portfolio.name;
       this.description = portfolio.description ?? '';
       this.tickerIds = portfolio.tickerIds;
+
+      if (portfolio.tickerIds.length) {
+        this.tickerCodes = tickers
+          .filter(ticker => portfolio.tickerIds.includes(ticker.id))
+          .map(ticker => ticker.code);
+      }
     }
   }
 
   private get tickerPlaceholder(): string {
-    const { tickerIds, tickers } = this;
-    if (!tickerIds.length) {
+    const { tickerCodes } = this;
+    if (!tickerCodes.length) {
       return 'Seleccione al menos un ticker';
     } else {
-      const tickerCodes = tickers
-        .filter(ticker => tickerIds.includes(ticker.id))
-        .map(ticker => ticker.code);
       if (tickerCodes.length <= maxTickersShown) {
         return tickerCodes.join(', ');
       } else {
@@ -160,9 +180,29 @@ export default class PortfolioEditForm extends Vue {
     }
   }
 
+  private get showTickerError(): boolean {
+    return this.tickersModified && this.tickerIds.length === 0;
+  }
+
+  private tickerItemClicked(ticker: Ticker): void {
+    if (this.tickerIds.includes(ticker.id)) {
+      this.tickerIds = this.tickerIds.filter(
+        tickerId => ticker.id !== tickerId
+      );
+      this.tickerCodes = this.tickerCodes.filter(
+        tickerCode => ticker.code !== tickerCode
+      );
+    } else {
+      this.tickerIds.push(ticker.id);
+      this.tickerCodes.push(ticker.code);
+    }
+    this.tickersModified = true;
+  }
+
   private save(isInvalid: boolean): void {
-    if (isInvalid) {
+    if (isInvalid || this.tickerIds.length === 0) {
       this.portfolioEditObserver.validate();
+      this.tickersModified = true;
       return;
     }
 
@@ -184,8 +224,8 @@ export default class PortfolioEditForm extends Vue {
 </script>
 
 <style scoped lang="scss">
-.ticker-selector /deep/ {
-  & .dropdown {
+.ticker-selector {
+  & /deep/ .dropdown {
     &,
     &-trigger,
     &-trigger button,
@@ -198,18 +238,48 @@ export default class PortfolioEditForm extends Vue {
     }
 
     &-content {
-      max-height: 200px;
       overflow-y: auto;
+    }
+
+    &-item {
+      padding-right: 1rem;
+
+      span {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
     }
   }
 
-  & a.dropdown-item.is-active {
-    background-color: $blue-active;
+  .ticker-dropdown {
+    &_item {
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      padding: 0 1rem;
+
+      &:hover,
+      &--active {
+        color: $white;
+        background-color: $blue-active;
+      }
+    }
+
+    &_filter {
+      padding: 0 0.75rem;
+    }
   }
 }
 
 .dropdown-error {
   color: $red;
   border-color: $red;
+}
+
+.scroller {
+  max-height: 175px;
 }
 </style>
