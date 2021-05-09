@@ -14,4 +14,10 @@ module.exports = {
       patterns: [path.resolve(__dirname, './src/styles/styles.scss')],
     },
   },
+  chainWebpack: config => {
+    config.plugin('html').tap(args => {
+      args[0].title = 'Tu Cartera';
+      return args;
+    });
+  },
 };
