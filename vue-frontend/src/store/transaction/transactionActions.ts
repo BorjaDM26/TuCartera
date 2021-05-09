@@ -80,6 +80,7 @@ export class TransactionActions extends Actions<
       await transactionAdd(params);
       await this.dispatch('fetchTransactions');
       await this.portfolioCtx.dispatch('fetchTickersState');
+      await this.portfolioCtx.dispatch('fetchTickersValue');
       this.commit('setFetchTransactionAddStatus', FetchStatus.SUCCESS);
     } catch (error) {
       this.commit('setFetchTransactionAddStatus', FetchStatus.FAILURE);
@@ -92,6 +93,7 @@ export class TransactionActions extends Actions<
       await transactionEdit(params);
       await this.dispatch('fetchTransactions');
       await this.portfolioCtx.dispatch('fetchTickersState');
+      await this.portfolioCtx.dispatch('fetchTickersValue');
       this.commit('setFetchTransactionEditStatus', FetchStatus.SUCCESS);
     } catch (error) {
       this.commit('setFetchTransactionEditStatus', FetchStatus.FAILURE);
@@ -107,9 +109,20 @@ export class TransactionActions extends Actions<
       await this.dispatch('fetchTransactions');
       this.commit('deleteTransaction', params.id);
       await this.portfolioCtx.dispatch('fetchTickersState');
+      await this.portfolioCtx.dispatch('fetchTickersValue');
       this.commit('setFetchTransactionDeleteStatus', FetchStatus.SUCCESS);
     } catch (error) {
       this.commit('setFetchTransactionDeleteStatus', FetchStatus.FAILURE);
     }
+  }
+
+  public reset(): void {
+    this.commit('setTransactions', []);
+    this.commit('setFetchTransactionsStatus', FetchStatus.PENDING);
+    this.commit('setSelectedTransaction', null);
+    this.commit('setFetchTransactionItemStatus', FetchStatus.PENDING);
+    this.commit('setFetchTransactionAddStatus', FetchStatus.PENDING);
+    this.commit('setFetchTransactionEditStatus', FetchStatus.PENDING);
+    this.commit('setFetchTransactionDeleteStatus', FetchStatus.PENDING);
   }
 }

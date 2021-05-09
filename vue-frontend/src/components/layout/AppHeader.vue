@@ -41,18 +41,23 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import { userStore } from '@/store/user/userStore';
+import { portfolioStore } from '@/store/portfolio/portfolioStore';
+import { transactionStore } from '@/store/transaction/transactionStore';
 import {
   LoginRouteName,
   PortfolioListRouteName,
   RegisterRouteName,
   TransactionListRouteName,
 } from '@/router/routeNames';
+import { FetchStatus } from '@/models/enum';
 
 @Component({
   name: 'AppHeader',
 })
 export default class AppHeader extends Vue {
   private userCtx = userStore.context(this.$store);
+  private portfolioCtx = portfolioStore.context(this.$store);
+  private transactionCtx = transactionStore.context(this.$store);
 
   private loginRoute = { name: LoginRouteName };
   private registerRoute = { name: RegisterRouteName };
@@ -65,7 +70,17 @@ export default class AppHeader extends Vue {
 
   private async logout() {
     await this.userCtx.actions.logout();
-    this.$router.push(this.loginRoute);
+    if (this.userCtx.state.fetchLogoutStatus === FetchStatus.SUCCESS) {
+      this.portfolioCtx.actions.reset();
+      this.transactionCtx.actions.reset();
+      this.$router.push(this.loginRoute);
+    } else {
+      this.$buefy.toast.open({
+        message: 'Ha habido un problema intentando cerrar sesión',
+        position: 'is-bottom-right',
+        type: 'is-danger',
+      });
+    }
   }
 }
 </script>
