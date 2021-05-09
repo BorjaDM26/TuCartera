@@ -120,4 +120,19 @@ export class PortfolioActions extends Actions<
       this.commit('setFetchTickersValueStatus', FetchStatus.FAILURE);
     }
   }
+
+  public reset(): void {
+    this.commit('setPortfolios', []);
+    this.commit('setFetchPortfoliosStatus', FetchStatus.PENDING);
+    this.commit('setSelectedPortfolio', null);
+    this.commit('setFetchPortfolioItemStatus', FetchStatus.PENDING);
+    this.commit('setFetchPortfolioAddStatus', FetchStatus.PENDING);
+    this.commit('setFetchPortfolioEditStatus', FetchStatus.PENDING);
+    this.commit('setFetchPortfolioDeleteStatus', FetchStatus.PENDING);
+
+    this.commit('setTickersState', []);
+    this.commit('setFetchTickersStateStatus', FetchStatus.PENDING);
+    this.commit('setTickersValue', []);
+    this.commit('setFetchTickersValueStatus', FetchStatus.PENDING);
+  }
 }

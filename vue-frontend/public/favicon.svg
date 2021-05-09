@@ -1,0 +1,71 @@
+<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <style>.cls-1{fill:url(#linear-gradient);}.cls-2{fill:url(#linear-gradient-2);}.cls-3{fill:url(#linear-gradient-3);}.cls-4{fill:url(#linear-gradient-4);}.cls-5{fill:url(#linear-gradient-5);}.cls-6{fill:url(#linear-gradient-6);}.cls-11,.cls-13,.cls-7,.cls-8{fill:#008e1b;}.cls-7{clip-rule:evenodd;}.cls-10,.cls-11,.cls-8{fill-rule:evenodd;}.cls-9{mask:url(#mask);}.cls-10{fill:#fff;}.cls-11{opacity:0.3;}.cls-12{clip-path:url(#clip-path);}.cls-14{mask:url(#mask-2);}.cls-15{mask:url(#mask-3);}.cls-16{clip-path:url(#clip-path-2);}.cls-17{clip-path:url(#clip-path-3);}.cls-18{mask:url(#mask-4);}.cls-19{mask:url(#mask-5);}.cls-20{mask:url(#mask-6);}.cls-21{fill:#008e1b;}</style>
+  <mask maskUnits="userSpaceOnUse" height="46.42" width="40.07" y="85.18" x="37.88" id="mask">
+   <rect id="svg_1" height="46.42" width="40.07" y="85.18" x="37.88" class="cls-1"/>
+  </mask>
+  <clipPath id="clip-path">
+   <path id="svg_2" d="m61.28,73.82l6.49,-16.2a6.36,6.36 0 0 1 8.23,-3.53l25.66,10.27a6.36,6.36 0 0 1 3.53,8.25l-1.32,3.29a13.11,13.11 0 0 0 -7.11,-2.08l-35.48,0z" class="cls-7"/>
+  </clipPath>
+  <mask maskUnits="userSpaceOnUse" height="10.88" width="36.59" y="65.02" x="69.08" id="mask-2">
+   <rect id="svg_3" height="10.88" width="36.59" y="65.02" x="69.08" class="cls-2"/>
+  </mask>
+  <mask maskUnits="userSpaceOnUse" height="19.74" width="29.69" y="54.08" x="61.28" id="mask-3">
+   <rect id="svg_4" height="19.74" width="29.69" y="54.08" x="61.28" class="cls-3"/>
+  </mask>
+  <clipPath id="clip-path-2">
+   <path id="svg_5" d="m53.17,73.82l2.71,-12.38a6.35,6.35 0 0 1 7.55,-4.84l0.84,0.18l-6.82,17l-4.28,0.04z" class="cls-7"/>
+  </clipPath>
+  <clipPath id="clip-path-3">
+   <path id="svg_6" d="m44.65,73.82l1,-8.39a6.36,6.36 0 0 1 7,-5.57a7.62,7.62 0 0 0 -0.22,0.82l-2.91,13.14l-4.87,0z" class="cls-7"/>
+  </clipPath>
+  <mask maskUnits="userSpaceOnUse" height="12.18" width="26.33" y="95.55" x="82.17" id="mask-4">
+   <rect id="svg_7" height="12.18" width="26.33" y="95.55" x="82.17" class="cls-4"/>
+  </mask>
+  <mask maskUnits="userSpaceOnUse" height="8.19" width="67.87" y="77.52" x="37.88" id="mask-5">
+   <rect id="svg_8" height="8.19" width="67.87" y="77.52" x="37.88" class="cls-5"/>
+  </mask>
+  <mask maskUnits="userSpaceOnUse" height="63.65" width="10.24" y="67.95" x="27.64" id="mask-6">
+   <rect id="svg_9" height="63.65" width="10.24" y="67.95" x="27.64" class="cls-6"/>
+  </mask>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <path id="svg_10" d="m87.76,56l14,0l0,-6a8.54,8.54 0 0 0 -8.51,-8.51l-56.61,0l0,-0.14l0.41,-3.56l0.7,-5.79l-8,0a9.72,9.72 0 0 0 -9.69,9.7l0,45.44a8.54,8.54 0 0 0 8.51,8.51l64.68,0a8.54,8.54 0 0 0 8.51,-8.51l0,-6l-14,0c-7.24,0 -13.15,-5.64 -13.15,-12.55s5.91,-12.59 13.15,-12.59z" class="cls-8"/>
+  <g id="svg_11" class="cls-9">
+   <path id="svg_12" d="m74,95.6l-40.12,0l0,-46.42c0.11,1 0.15,2 0.16,2.79c0.07,5.64 -0.43,15.76 2.48,22.53c6.7,15.6 36.37,-1 37.43,21.1" class="cls-10"/>
+  </g>
+  <path id="svg_13" d="m20.11,87.74l0,0m77.78,6.47a8.39,8.39 0 0 1 -4.64,1.39l-64.65,0a8.55,8.55 0 0 1 -8.49,-7.86c1.87,6.78 10.78,6.17 16.24,6.2l61.54,0.27z" class="cls-11"/>
+  <path id="svg_14" d="m57.28,37.82l6.49,-16.2a6.36,6.36 0 0 1 8.23,-3.53l25.66,10.27a6.36,6.36 0 0 1 3.53,8.25l-1.32,3.29a13.11,13.11 0 0 0 -7.11,-2.08l-35.48,0z" class="cls-8"/>
+  <g id="svg_15" class="cls-12">
+   <rect id="svg_16" height="23.11" width="45.23" y="16.79" x="57.28" class="cls-13"/>
+  </g>
+  <g id="svg_17" class="cls-14">
+   <path id="svg_18" d="m98.92,29a6.38,6.38 0 0 1 2.29,7.59l-1.32,3.29a13.11,13.11 0 0 0 -7.11,-2.08l-27.7,0l33.84,-8.8z" class="cls-10"/>
+  </g>
+  <g id="svg_19" class="cls-15">
+   <path id="svg_20" d="m57.28,37.82l6.49,-16.2a6.34,6.34 0 0 1 3.57,-3.54l19.66,19.74l-29.72,0z" class="cls-8"/>
+  </g>
+  <path id="svg_21" d="m49.17,37.82l2.71,-12.38a6.35,6.35 0 0 1 7.55,-4.84l0.84,0.18l-6.82,17l-4.28,0.04z" class="cls-8"/>
+  <g id="svg_22" class="cls-16">
+   <rect id="svg_23" height="17.96" width="11.1" y="19.85" x="49.17" class="cls-13"/>
+  </g>
+  <polygon id="svg_24" points="60.269989013671875,20.779998779296875 53.44999694824219,37.81999969482422 49.16999816894531,37.81999969482422 60.269989013671875,20.779998779296875 " class="cls-11"/>
+  <path id="svg_25" d="m40.65,37.82l1,-8.39a6.36,6.36 0 0 1 7,-5.57a7.62,7.62 0 0 0 -0.22,0.82l-2.91,13.14l-4.87,0z" class="cls-8"/>
+  <g id="svg_26" class="cls-17">
+   <rect id="svg_27" height="14.33" width="7.97" y="23.48" x="40.65" class="cls-13"/>
+  </g>
+  <polygon id="svg_28" points="48.6199951171875,23.860000610351562 45.52000427246094,37.81999969482422 40.649993896484375,37.81999969482422 48.6199951171875,23.860000610351562 " class="cls-11"/>
+  <g id="svg_29" class="cls-18">
+   <path id="svg_30" d="m87.17,59.55l14.83,0a2.84,2.84 0 0 1 2.5,1.45c-0.43,4.28 -10.93,3.8 -17,3.74c-7.29,-0.08 -8.71,7 -8.72,7a8.89,8.89 0 0 1 -0.59,-3.18l0,0a9,9 0 0 1 9,-9" class="cls-8"/>
+  </g>
+  <path id="svg_31" d="m29.74,41.55l6.89,0l0,-0.17l0.41,-3.56l-7.3,0a1.87,1.87 0 1 0 0,3.73" class="cls-8"/>
+  <g id="svg_32" class="cls-19">
+   <path id="svg_33" d="m33.88,43l56.3,0c7.8,0 10.65,3.42 11.57,6.75a8.54,8.54 0 0 0 -8.5,-8.19l-0.74,0l-55.88,0l-2.75,0l0,1.44z" class="cls-8"/>
+  </g>
+  <path id="svg_34" d="m102,59.55l-14.83,0a9,9 0 0 0 -9,9l0,0a9,9 0 0 0 9,9l14.83,0a2.84,2.84 0 0 0 2.84,-2.83l0,-12.34a2.84,2.84 0 0 0 -2.84,-2.83zm-8.72,9.8a3.45,3.45 0 1 1 -4.06,-4.06a3.45,3.45 0 0 1 4.1,4.06l-0.04,0z" class="cls-8"/>
+  <g id="svg_35" class="cls-20">
+   <path id="svg_36" d="m33.88,95.6l-5.28,0a8.51,8.51 0 0 1 -5,-1.6l0,-59.84a9.65,9.65 0 0 1 6.18,-2.16l4.1,0l0,63.6z" class="cls-10"/>
+  </g>
+ </g>
+</svg>
