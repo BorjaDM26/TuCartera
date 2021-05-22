@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using TuCartera.DBModel;
@@ -20,15 +21,18 @@ namespace TuCartera.Controllers
         private readonly IAdapter _adapter;
         private readonly IUsersService _usersService;
         private readonly IMapper _mapper;
+        private readonly ILogger<UsersController> _logger;
 
         public UsersController(
             IAdapter adapter,
             IUsersService usersService,
-            IMapper mapper
+            IMapper mapper,
+            ILogger<UsersController> logger
         ) {
             _adapter = adapter;
             _usersService = usersService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         #endregion
@@ -67,6 +71,7 @@ namespace TuCartera.Controllers
             }
             else
             {
+                _logger.LogError("PostLogin: User could not be logged in");
                 return BadRequest();
             }
         }
@@ -80,8 +85,9 @@ namespace TuCartera.Controllers
                 await _usersService.doLogout();
                 return NoContent();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Logout: User could not be logged out");
                 return Unauthorized();
             }
         }
@@ -95,7 +101,9 @@ namespace TuCartera.Controllers
             if(userId != -1) {
                 await _usersService.doLogin(userId, param.Email);
                 return NoContent();
-            } else {
+            } else
+            {
+                _logger.LogError("Register: User could not be registered");
                 return BadRequest();
             }
         }

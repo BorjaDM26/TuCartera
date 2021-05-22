@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using TuCartera.DBModel;
@@ -20,15 +21,18 @@ namespace TuCartera.Controllers
         private readonly IAdapter _adapter;
         private readonly IUsersService _usersService;
         private readonly IMapper _mapper;
+        private readonly ILogger<PortfoliosController> _logger;
 
         public PortfoliosController(
             IAdapter adapter,
             IUsersService usersService,
-            IMapper mapper
+            IMapper mapper,
+            ILogger<PortfoliosController> logger
         ) {
             _adapter = adapter;
             _usersService = usersService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         #endregion
@@ -57,8 +61,16 @@ namespace TuCartera.Controllers
             List<IGrouping<int, SpPortfolioItemResult>> portfolioTickers = _adapter.PortfolioItem(id)
                                                                                    .GroupBy(pt => pt.portfolio_id)
                                                                                    .ToList();
-            PortfolioDTO portfolio = _mapper.Map<List<PortfolioDTO>>(portfolioTickers).FirstOrDefault();
-            return Ok(portfolio);
+            if (portfolioTickers != null && portfolioTickers.Any())
+            {
+                PortfolioDTO portfolio = _mapper.Map<List<PortfolioDTO>>(portfolioTickers).FirstOrDefault();
+                return Ok(portfolio);
+            }
+            else
+            {
+                _logger.LogError("Item: Portfolio does not exist");
+                return NotFound();
+            }
         }
 
 
@@ -80,6 +92,7 @@ namespace TuCartera.Controllers
             }
             else
             {
+                _logger.LogError("Add: Portfolio could not be added");
                 return BadRequest();
             }
         }
@@ -102,6 +115,7 @@ namespace TuCartera.Controllers
             }
             else
             {
+                _logger.LogError("Add: Portfolio could not be edited");
                 return BadRequest();
             }
         }
@@ -119,6 +133,7 @@ namespace TuCartera.Controllers
             }
             else
             {
+                _logger.LogError("Add: Portfolio could not be deleted");
                 return BadRequest();
             }
         }
