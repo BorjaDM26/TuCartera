@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using TuCartera.DBModel;
 using TuCartera.DBModel.Contexts.Entities;
@@ -19,15 +20,18 @@ namespace TuCartera.Controllers
         private readonly IAdapter _adapter;
         private readonly IUsersService _usersService;
         private readonly IMapper _mapper;
+        private readonly ILogger<TransactionsController> _logger;
 
         public TransactionsController(
             IAdapter adapter,
             IUsersService usersService,
-            IMapper mapper
+            IMapper mapper,
+            ILogger<TransactionsController> logger
         ) {
             _adapter = adapter;
             _usersService = usersService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         #endregion
@@ -52,8 +56,17 @@ namespace TuCartera.Controllers
         public IActionResult Item([FromRoute] int id)
         {
             SpTransactionItemResult res = _adapter.TransactionItem(id);
-            TransactionDTO transactions = _mapper.Map<TransactionDTO>(res);
-            return Ok(transactions);
+
+            if (res != null)
+            {
+                TransactionDTO transactions = _mapper.Map<TransactionDTO>(res);
+                return Ok(transactions);
+            }
+            else
+            {
+                _logger.LogError("Item: Transaction does no exist");
+                return NotFound();
+            }
         }
 
 
@@ -80,6 +93,7 @@ namespace TuCartera.Controllers
             } 
             else
             {
+                _logger.LogError("Add: Transaction could not be added");
                 return BadRequest();
             }
         }
@@ -107,6 +121,7 @@ namespace TuCartera.Controllers
             }
             else
             {
+                _logger.LogError("Add: Transaction could not be updated");
                 return BadRequest();
             }
         }
@@ -124,6 +139,7 @@ namespace TuCartera.Controllers
             }
             else
             {
+                _logger.LogError("Add: Transaction could not be deleted");
                 return BadRequest();
             }
         }

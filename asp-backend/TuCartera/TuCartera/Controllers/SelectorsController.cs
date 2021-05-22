@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using TuCartera.DBModel;
 using TuCartera.DBModel.Contexts.Entities;
@@ -17,13 +18,16 @@ namespace TuCartera.Controllers
 
         private readonly IAdapter _adapter;
         private readonly IMapper _mapper;
+        private readonly ILogger<SelectorsController> _logger;
 
         public SelectorsController(
             IAdapter adapter,
-            IMapper mapper
+            IMapper mapper,
+            ILogger<SelectorsController> logger
         ) {
             _adapter = adapter;
             _mapper = mapper;
+            _logger = logger;
         }
 
         #endregion
@@ -36,8 +40,17 @@ namespace TuCartera.Controllers
         public IActionResult CurrencyList()
         {
             List<SpCurrencyItemResult> res = _adapter.CurrencyList();
-            List<CurrencyDTO> currencies = _mapper.Map<List<CurrencyDTO>>(res);
-            return Ok(currencies);
+
+            if (res != null)
+            {
+                List<CurrencyDTO> currencies = _mapper.Map<List<CurrencyDTO>>(res);
+                return Ok(currencies);
+            }
+            else
+            {
+                _logger.LogError("CurrencyList: List of currencies could not be loaded");
+                return NotFound();
+            }
         }
 
 
@@ -46,8 +59,17 @@ namespace TuCartera.Controllers
         public IActionResult TickerList()
         {
             List<SpTickerItemResult> res = _adapter.TickerList();
-            List<TickerDTO> tickers = _mapper.Map<List<TickerDTO>>(res);
-            return Ok(tickers);
+
+            if (res != null)
+            {
+                List<TickerDTO> tickers = _mapper.Map<List<TickerDTO>>(res);
+                return Ok(tickers);
+            }
+            else
+            {
+                _logger.LogError("TickerList: List of tickers could not be loaded");
+                return NotFound();
+            }
         }
 
 
@@ -56,8 +78,17 @@ namespace TuCartera.Controllers
         public IActionResult TransactionTypeList()
         {
             List<SpTransactionTypeItemResult> res = _adapter.TransactionTypeList();
-            List<TransactionTypeDTO> transactionTypes = _mapper.Map<List<TransactionTypeDTO>>(res);
-            return Ok(transactionTypes);
+
+            if (res != null)
+            {
+                List<TransactionTypeDTO> transactionTypes = _mapper.Map<List<TransactionTypeDTO>>(res);
+                return Ok(transactionTypes);
+            }
+            else
+            {
+                _logger.LogError("TransactionTypeList: List of transaction types could not be loaded");
+                return NotFound();
+            }
         }
 
         #endregion
