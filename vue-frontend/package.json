@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --dest ../asp-backend/TuCartera/TuCartera/ClientApp",
+    "build": "vue-cli-service build --dest ../asp-backend/TuCartera/TuCartera/ClientApp/dist",
+    "build:dev": "vue-cli-service build --mode dev --dest ../asp-backend/TuCartera/TuCartera/ClientApp/dist",
+    "build:prod": "vue-cli-service build --mode prod --dest ../asp-backend/TuCartera/TuCartera/ClientApp/dist",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -42,6 +44,7 @@
     "prettier": "^2.2.1",
     "sass-loader": "^8.0.2",
     "style-resources-loader": "^1.4.1",
+    "tsconfig-paths-webpack-plugin": "^3.5.1",
     "typescript": "~4.1.5",
     "vue-cli-plugin-style-resources-loader": "~0.1.5",
     "vue-template-compiler": "^2.6.11"
